@@ -67,12 +67,6 @@ module RubyProf
         }
       end
 
-      # def get_profiles
-      #   session_id = request.session_options[:id]
-      #   Dir[File.join(RubyProf::Rails::Config.path, "#{session_id}*")]
-      #     .reverse
-      # end
-
       def string_to_array(string)
         string.split("\n")
           .reject(&:empty?)
@@ -91,7 +85,7 @@ module RubyProf
       end
 
       def cache_class_enabled?
-        !::Rails.application.config.cache_classes
+        ::Rails.application.config.cache_classes
       end
 
       def cache_class_enabled_alert

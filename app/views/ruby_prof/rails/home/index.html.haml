@@ -140,6 +140,7 @@
           -else
             =button_tag 'Start Profiling' , name: 'start', value: 1, class: 'btn btn-success btn-lg btn-block' , type: :submit
 
-      .spacer
-      #results
-        = render 'profiles'
+      - if !@config[:enabled]
+        .spacer
+        #results
+          = render 'profiles'

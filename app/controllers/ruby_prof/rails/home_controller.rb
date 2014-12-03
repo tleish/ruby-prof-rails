@@ -5,11 +5,12 @@ module RubyProf
       PRINTERS = %w(FlatPrinter FlatPrinterWithLineNumbers GraphPrinter GraphHtmlPrinter DotPrinter CallTreePrinter CallStackPrinter MultiPrinter)
 
       http_basic_authenticate_with name: RubyProf::Rails::Config.username, password: RubyProf::Rails::Config.password if RubyProf::Rails::Config.has_authentication?
-      before_filter :cache_class_enabled?, :disabled_alert
+      before_filter :init_ruby_prof_rails_session, :cache_class_enabled?, :disabled_alert
 
       def index
         @config = session[:ruby_prof_rails] || {}
-        @profiles = Dir[File.join(RubyProf::Rails::Config.path, "#{request.session_options[:id]}*")]
+        @session_id = request.session_options[:id]
+        @profiles = get_profiles
       end
 
       def update
@@ -20,7 +21,34 @@ module RubyProf
         redirect_to action: 'index'
       end
 
+      def show
+        path = get_profiles[params[:id].to_i]
+        name = File.basename(path).gsub(request.session_options[:id], 'ruby-prof-rails')
+        if File.exist?(path)
+          file_hash = RubyProf::Rails::Printer.filename_hash(File.basename(path))
+          time = Time.at(file_hash[:time].to_i).strftime('%Y-%m-%d_%I-%M-%S-%Z')
+          send_file path, filename: "ruby-prof-rails_#{time}.#{file_hash[:format]}"
+        else
+          render text: "Profiler file #{name} for this session was not found." # write some content to the body
+        end
+      end
+
+      def destroy
+        path = get_profiles[params[:id].to_i]
+        if File.exist?(path)
+          File.unlink path
+          flash[:notice] = 'Profile deleted'
+        else
+          flash[:alert] = 'Profile not found'
+        end
+        redirect_to action: 'index'
+      end
+
       private
+
+      def init_ruby_prof_rails_session
+        session[:ruby_prof_rails] ||= {}
+      end
 
       def flash_updates
         return flash[:warning] = 'Ruby Prof running for current Browser Session...' if enabled?
@@ -42,6 +70,12 @@ module RubyProf
         }
       end
 
+      def get_profiles
+        session_id = request.session_options[:id]
+        Dir[File.join(RubyProf::Rails::Config.path, "#{session_id}*")]
+          .reverse
+      end
+
       def string_to_array(string)
         string.split("\n")
           .reject(&:empty?)
@@ -60,7 +94,7 @@ module RubyProf
       end
 
       def cache_class_enabled?
-        !Rails.application.config.cache_classes
+        !::Rails.application.config.cache_classes
       end
 
       def cache_class_enabled_alert

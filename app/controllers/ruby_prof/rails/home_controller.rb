@@ -2,15 +2,13 @@ module RubyProf
   module Rails
     class HomeController < RubyProf::Rails::ApplicationController
 
-      PRINTERS = %w(FlatPrinter FlatPrinterWithLineNumbers GraphPrinter GraphHtmlPrinter DotPrinter CallTreePrinter CallStackPrinter MultiPrinter)
-
       http_basic_authenticate_with name: RubyProf::Rails::Config.username, password: RubyProf::Rails::Config.password if RubyProf::Rails::Config.has_authentication?
       before_filter :init_ruby_prof_rails_session, :cache_class_enabled?, :disabled_alert
 
       def index
         @config = session[:ruby_prof_rails] || {}
         @session_id = request.session_options[:id]
-        @profiles = get_profiles
+        @profiles = RubyProf::Rails::Profiles.list
       end
 
       def update
@@ -22,19 +20,18 @@ module RubyProf
       end
 
       def show
-        path = get_profiles[params[:id].to_i]
-        name = File.basename(path).gsub(request.session_options[:id], 'ruby-prof-rails')
+        path = RubyProf::Rails::Profiles.find(params[:id])
         if File.exist?(path)
-          file_hash = RubyProf::Rails::Printer.filename_hash(File.basename(path))
+          file_hash = RubyProf::Rails::Profiles.filename_hash(File.basename(path))
           time = Time.at(file_hash[:time].to_i).strftime('%Y-%m-%d_%I-%M-%S-%Z')
-          send_file path, filename: "ruby-prof-rails_#{time}.#{file_hash[:format]}"
+          send_file path, filename: "#{RubyProf::Rails::Profiles::PREFIX}_#{time}.#{file_hash[:format]}"
         else
-          render text: "Profiler file #{name} for this session was not found." # write some content to the body
+          render text: 'Profiler file was not found and may have been deleted.' # write some content to the body
         end
       end
 
       def destroy
-        path = get_profiles[params[:id].to_i]
+        path = RubyProf::Rails::Profiles.find(params[:id])
         if File.exist?(path)
           File.unlink path
           flash[:notice] = 'Profile deleted'
@@ -70,11 +67,11 @@ module RubyProf
         }
       end
 
-      def get_profiles
-        session_id = request.session_options[:id]
-        Dir[File.join(RubyProf::Rails::Config.path, "#{session_id}*")]
-          .reverse
-      end
+      # def get_profiles
+      #   session_id = request.session_options[:id]
+      #   Dir[File.join(RubyProf::Rails::Config.path, "#{session_id}*")]
+      #     .reverse
+      # end
 
       def string_to_array(string)
         string.split("\n")

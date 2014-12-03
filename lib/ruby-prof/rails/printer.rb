@@ -1,4 +1,5 @@
 require_relative 'config'
+require_relative 'profiles'
 
 module RubyProf
   module Rails
@@ -14,17 +15,6 @@ module RubyProf
         CallTreePrinter: 'grind.dat',
         CallStackPrinter: 'stack.html'
       }
-
-      def self.filename_hash(filename)
-        regexp_hash = {
-          session_id: '[^-]+',
-          time: '[0-9]+',
-          url: '.+',
-          format: PRINTERS.values.uniq.join('|')
-        }
-        regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
-        regexp.match filename
-      end
 
       def initialize(options = {})
         env = options.fetch(:env)
@@ -49,8 +39,8 @@ module RubyProf
       end
 
       def filename
-        name = [@request.session_options[:id]]
-        # name << Time.now.strftime('%Y-%m-%d-%H-%M-%S-%Z')
+        name = [RubyProf::Rails::Profiles::PREFIX]
+        name << @request.session_options[:id]
         name << Time.now.to_i
         name << url_slice
         name << format

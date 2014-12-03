@@ -10,8 +10,9 @@
       %th
         ACTION
   %tbody
-    - @profiles.each_with_index do |profile, id|
+    - @profiles.each do |profile|
       - file_hash = file_hash_from(profile)
+      - id = parse_id(profile)
       %tr
         %td
           = Time.at(file_hash[:time].to_i).strftime('%Y-%m-%d %I:%M:%S %Z')

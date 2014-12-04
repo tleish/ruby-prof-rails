@@ -4,7 +4,7 @@ module RubyProf
 
       def file_hash_from(file)
         filename = CGI::unescape(File.basename(file))
-        RubyProf::Rails::Profiles.filename_hash(filename)
+        RubyProf::Rails::Profiles.filename_to_hash(filename)
       end
 
       def parse_date_time(string)

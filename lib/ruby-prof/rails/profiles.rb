@@ -7,16 +7,31 @@ module RubyProf
 
       PREFIX = 'ruby-prof-rails'
 
-      def self.filename_hash(filename)
-        regexp_hash = {
-          prefix: PREFIX,
-          session_id: '[^-]+',
-          time: '[0-9]+',
-          url: '.+',
-          format: RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
-        }
+      REGEXP_HASH = {
+        prefix: PREFIX,
+        time: '[0-9]+',
+        session_id: '[^-]+',
+        url: '.+',
+        format: nil
+      }
+
+      INVALID_FILENAME = {
+        prefix: PREFIX,
+        time: 'NA',
+        url: 'NA',
+        format: 'NA'
+      }
+
+      def self.filename_to_hash(filename)
+        regexp_hash = REGEXP_HASH
+        regexp_hash[:format] = RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
         regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
-        regexp.match filename
+        regexp.match(filename) || INVALID_FILENAME
+      end
+
+      def self.hash_to_filename(hash)
+        name = REGEXP_HASH.keys.map { |key| hash.fetch(key)}
+        CGI::escape(name.join('-'))
       end
 
       def self.list

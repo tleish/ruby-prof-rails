@@ -39,12 +39,13 @@ module RubyProf
       end
 
       def filename
-        name = [RubyProf::Rails::Profiles::PREFIX]
-        name << @request.session_options[:id]
-        name << Time.now.to_i
-        name << url_slice
-        name << format
-        CGI::escape(name.join('-'))
+        RubyProf::Rails::Profiles.hash_to_filename(
+          prefix: RubyProf::Rails::Profiles::PREFIX,
+          time: Time.now.to_i,
+          session_id: @request.session_options[:id],
+          url: url_slice,
+          format: format
+        )
       end
 
       def url_slice

@@ -69,7 +69,6 @@ module RubyProf
       def string_to_array(string)
         string.split("\n")
           .reject(&:empty?)
-          # .map{ |regex| Regex.new regex }
       end
 
     end

@@ -47,12 +47,12 @@ module RubyProf
       end
 
       def flash_updates
-        return flash[:warning] = 'Ruby Prof running for current Browser Session...' if enabled?
+        return flash[:warning] = 'Ruby Prof running for current Browser Session...' if profiling_active?
         flash[:ruby_prof_rails] = :stop
         flash[:notice] = 'Ruby Prof Stopped'
       end
 
-      def enabled?
+      def profiling_active?
         session[:ruby_prof_rails][:enabled]
       end
 

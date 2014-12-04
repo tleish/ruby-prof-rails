@@ -39,3 +39,26 @@ textarea {
 .spacer {
   height: 20px;
 }
+
+.modal {
+  display: none;
+}
+
+fieldset {
+  border: none;
+}
+
+label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  text-align: left;
+}

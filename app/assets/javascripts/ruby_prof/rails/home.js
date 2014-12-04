@@ -5,8 +5,15 @@ $(function() {
     $(this).find('button').text('Processing...')
   });
 
+  if( !bootstrap_enabled() ){
+    $("a[data-toggle='modal'").hide();
+  }
+
 });
 
+function bootstrap_enabled(){
+  return (typeof $().modal == 'function');
+}
 
 // jQuery plugin to prevent double submission of forms
 jQuery.fn.preventDoubleSubmission = function() {

@@ -3,9 +3,11 @@
   %head
     %title Rails Ruby Prof
     %meta{:charset => "utf-8"}/
-    = stylesheet_link_tag    "ruby_prof/rails/application", media: "all"
-    = javascript_include_tag "ruby_prof/rails/application"
-    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    = stylesheet_link_tag    'ruby_prof/rails/application', media: 'all'
+    = stylesheet_link_tag    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'
+    = javascript_include_tag 'ruby_prof/rails/application'
+    = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js'
+    %meta{:content => 'width=device-width, initial-scale=1', :name => 'viewport'}/
     = csrf_meta_tags
   %body
     .layout

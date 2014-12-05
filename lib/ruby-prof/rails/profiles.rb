@@ -22,11 +22,14 @@ module RubyProf
         format: 'NA'
       }
 
+      ID_PATTERN = [:time, :session_id]
+
       def self.filename_to_hash(filename)
         regexp_hash = REGEXP_HASH
         regexp_hash[:format] = RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
         regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
-        regexp.match(filename) || INVALID_FILENAME
+        match_data = regexp.match(filename)
+        match_data.present? && match_data.to_hash || INVALID_FILENAME
       end
 
       def self.hash_to_filename(hash)
@@ -38,14 +41,25 @@ module RubyProf
         Dir[File.join(RubyProf::Rails::Config.path, "#{PREFIX}*")]
       end
 
-      def self.find(session_time)
+      def self.get_id(filename)
+        file_hash = filename_to_hash(filename)
+        file_hash.slice(ID_PATTERN).values.join('-')
+      end
+
+      def self.find(id)
         profiles = RubyProf::Rails::Profiles.list
         profiles.detect do |path|
           file = File.basename(path)
-          file =~ /^#{PREFIX}-#{session_time}/
+          file =~ /^#{PREFIX}-#{id}/
         end
       end
 
     end
+  end
+end
+
+class MatchData
+  def to_hash
+    Hash[ names.zip(captures) ].symbolize_keys
   end
 end

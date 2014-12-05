@@ -13,9 +13,8 @@ module RubyProf
         "#{time}"
       end
 
-      def parse_id(file)
-        file_hash = file_hash_from(file)
-        "#{file_hash[:session_id]}-#{file_hash[:time]}"
+      def get_id(filename)
+        RubyProf::Rails::Profiles.get_id(filename)
       end
 
       def display_name_from(file)

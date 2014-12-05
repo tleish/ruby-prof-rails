@@ -10,11 +10,6 @@ module RubyProf
           Pathname(@path)
         end
 
-        def content_types
-          @content_types = 'text/html' if @content_types.blank?
-          Array(@content_types)
-        end
-
         def extract_options_from(env)
           Hash(env['rack.session'][:ruby_prof_rails])
         end

@@ -19,7 +19,6 @@ module RubyProf
         @env = options.fetch(:env)
         @app = options.fetch(:app)
         @options = RubyProf::Rails::Config.extract_options_from @env
-        @content_types = RubyProf::Rails::Config.content_types
       end
 
       def enabled?
@@ -31,7 +30,7 @@ module RubyProf
       end
 
       def skip?
-        is_config_uri? || disabled?
+        is_config_uri? || disabled? || !is_route?
       end
 
       def call(env)
@@ -42,6 +41,14 @@ module RubyProf
       end
 
       private
+
+      def is_route?
+        begin
+          @app.recognize_path(@env['REQUEST_PATH']).present?
+        rescue ActionController::RoutingError
+          false
+        end
+      end
 
       def is_config_uri?
         @env['PATH_INFO'] =~ %r{/ruby_prof_rails}
@@ -55,7 +62,7 @@ module RubyProf
 
       def ruby_prof_stop_and_save
         @results = RubyProf.stop
-        return unless @results.present? && @body.present? && @content_types.include?(@body.content_type)
+        return unless @results.present?
         @results.eliminate_methods!(array_to_regex(:eliminate_methods))
         print
       end

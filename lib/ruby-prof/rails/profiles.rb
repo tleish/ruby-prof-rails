@@ -1,9 +1,12 @@
 require_relative 'config'
+require 'ostruct'
 
 module RubyProf
   module Rails
     # RubyProf Rails Profile Utility
     class Profiles
+
+      attr_reader :filename, :friendly_filename
 
       PREFIX = 'ruby-prof-rails'
 
@@ -24,34 +27,52 @@ module RubyProf
 
       ID_PATTERN = [:time, :session_id]
 
-      def self.filename_to_hash(filename)
+      class << self
+        def hash_to_filename(hash)
+          name = REGEXP_HASH.keys.map { |key| hash.fetch(key)}
+          CGI::escape(name.join('-'))
+        end
+
+        def list
+          Dir[File.join(RubyProf::Rails::Config.path, "#{PREFIX}*")].map do |file|
+            self.new(file)
+          end
+        end
+
+        def find(id)
+          profiles = RubyProf::Rails::Profiles.list
+          profiles.detect { |profile| profile.id == id }
+        end
+      end
+
+      def initialize(filename)
+        @filename = filename
+        @friendly_filename = friendly_filename
+      end
+
+      def exists?
+        File.exist?(@filename)
+      end
+
+      def basename
+        File.basename(@filename)
+      end
+
+      def friendly_filename
+        time = Time.at(hash[:time].to_i).strftime('%Y-%m-%d_%I-%M-%S-%Z')
+        "#{PREFIX}_#{time}.#{hash[:format]}"
+      end
+
+      def id
+        hash.slice(ID_PATTERN).values.join('-')
+      end
+
+      def hash
         regexp_hash = REGEXP_HASH
         regexp_hash[:format] = RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
         regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
-        match_data = regexp.match(filename)
+        match_data = regexp.match(basename)
         match_data.present? && match_data.to_hash || INVALID_FILENAME
-      end
-
-      def self.hash_to_filename(hash)
-        name = REGEXP_HASH.keys.map { |key| hash.fetch(key)}
-        CGI::escape(name.join('-'))
-      end
-
-      def self.list
-        Dir[File.join(RubyProf::Rails::Config.path, "#{PREFIX}*")]
-      end
-
-      def self.get_id(filename)
-        file_hash = filename_to_hash(filename)
-        file_hash.slice(ID_PATTERN).values.join('-')
-      end
-
-      def self.find(id)
-        profiles = RubyProf::Rails::Profiles.list
-        profiles.detect do |path|
-          file = File.basename(path)
-          file =~ /^#{PREFIX}-#{id}/
-        end
       end
 
     end

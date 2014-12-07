@@ -14,6 +14,7 @@ gemspec
 # gem 'debugger'
 
 group :test do
+  gem 'sqlite3'
   gem 'mocha', :require => false
   gem 'minitest-rails-capybara'
   gem 'minitest-reporters'

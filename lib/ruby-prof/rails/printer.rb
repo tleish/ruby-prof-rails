@@ -11,7 +11,7 @@ module RubyProf
         FlatPrinterWithLineNumbers: 'flat.txt',
         GraphPrinter: 'flat.txt',
         GraphHtmlPrinter: 'graph.html',
-        DotPrinter: 'dot',
+        DotPrinter: '.dot',
         CallTreePrinter: 'grind.dat',
         CallStackPrinter: 'stack.html'
       }

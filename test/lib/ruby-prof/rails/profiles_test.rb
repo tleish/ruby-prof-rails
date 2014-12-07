@@ -1,11 +1,11 @@
-# require 'minitest/autorun'
-# require 'minitest/rails'
 require 'test_helper'
+require_relative 'cleanup_profiles_module'
 require './lib/ruby-prof/rails/profiles'
 require 'digest/sha1'
 require 'fileutils'
 
 describe RubyProf::Rails::Profiles do
+  include RubyProf::Rails::CleanupProfilesModule
 
   before do
     @profiles = create_random_profiles
@@ -62,17 +62,10 @@ describe RubyProf::Rails::Profiles do
   private
 
   def create_random_profiles
-    RubyProf::Rails::Config.path = 'test/tmp'
     (1..10).each do |num|
       FileUtils.touch(RubyProf::Rails::Config.path + filename_from(num))
     end
     RubyProf::Rails::Profiles.list
-  end
-
-  def cleanup_profiles
-    RubyProf::Rails::Profiles.list.each do |profile|
-      File.unlink profile.filename
-    end
   end
 
   def filename_from(num)

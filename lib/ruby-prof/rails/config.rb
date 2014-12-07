@@ -15,7 +15,7 @@ module RubyProf
         attr_accessor :username, :password, :path
 
         def path
-          @path = ::Rails.root + 'tmp/performance' if @path.blank?
+          @path ||= ::Rails.root + 'tmp/performance'
           Pathname(@path)
         end
 

@@ -1,5 +1,4 @@
 require 'rack/ruby-prof-rails'
-require 'bootstrap-sass'
 
 module RubyProf
   module Rails

@@ -11,7 +11,7 @@ module RubyProf
       end
 
       def update
-        if enabled_config?
+        if @enable_config
           update_session
           flash_updates
         end
@@ -19,20 +19,19 @@ module RubyProf
       end
 
       def show
-        path = RubyProf::Rails::Profiles.find(params[:id])
-        if File.exist?(path)
-          file_hash = RubyProf::Rails::Profiles.filename_to_hash(File.basename(path))
-          time = Time.at(file_hash[:time].to_i).strftime('%Y-%m-%d_%I-%M-%S-%Z')
-          send_file path, filename: "#{RubyProf::Rails::Profiles::PREFIX}_#{time}.#{file_hash[:format]}"
+        profile = RubyProf::Rails::Profiles.find(params[:id])
+        if profile
+          time = profile.time.strftime('%Y-%m-%d_%I-%M-%S-%Z')
+          send_file profile.filename, filename: "#{profile.hash[:prefix]}_#{time}.#{profile.hash[:format]}"
         else
           render text: 'Profiler file was not found and may have been deleted.' # write some content to the body
         end
       end
 
       def destroy
-        path = RubyProf::Rails::Profiles.find(params[:id])
-        if File.exist?(path)
-          File.unlink path
+        profile = RubyProf::Rails::Profiles.find(params[:id])
+        if profile
+          File.unlink profile.filename
           flash[:notice] = 'Profile deleted'
         else
           flash[:alert] = 'Profile not found'

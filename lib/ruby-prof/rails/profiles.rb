@@ -1,5 +1,4 @@
 require_relative 'config'
-require 'ostruct'
 
 module RubyProf
   module Rails
@@ -41,7 +40,8 @@ module RubyProf
 
         def find(id)
           profiles = RubyProf::Rails::Profiles.list
-          profiles.detect { |profile| profile.id == id }
+          profile = profiles.detect { |profile| profile.id == id }
+          return profile if profile && profile.exists?
         end
       end
 
@@ -63,16 +63,22 @@ module RubyProf
         "#{PREFIX}_#{time}.#{hash[:format]}"
       end
 
+      def time
+        Time.at(hash[:time].to_i)
+      end
+
       def id
-        hash.slice(ID_PATTERN).values.join('-')
+        hash.slice(*ID_PATTERN).values.join('-')
       end
 
       def hash
-        regexp_hash = REGEXP_HASH
-        regexp_hash[:format] = RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
-        regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
-        match_data = regexp.match(basename)
-        match_data.present? && match_data.to_hash || INVALID_FILENAME
+        @hash ||= begin
+          regexp_hash = REGEXP_HASH
+          regexp_hash[:format] = RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
+          regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
+          match_data = regexp.match(basename)
+          match_data.present? && match_data.to_hash || INVALID_FILENAME
+        end
       end
 
     end

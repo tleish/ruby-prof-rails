@@ -11,18 +11,17 @@
         ACTION
   %tbody
     - @profiles.each do |profile|
-      - file_hash = file_hash_from(profile)
-      - id = get_id(profile)
+      - file_hash = profile.hash
       %tr
         %td
           = Time.at(file_hash[:time].to_i).strftime('%Y-%m-%d %I:%M:%S %Z')
         %td
           = link_to(file_hash[:url], file_hash[:url], target: '_blank')
         %td
-          = link_to(action: 'show', id: id ) do
+          = link_to(action: 'show', id: profile.id ) do
             %i.glyphicon.glyphicon-download-alt
             = file_hash[:format]
         %td
-          = link_to({action: 'destroy', id: id}, method: :delete, data: { confirm: 'Please confirm you want to delete this profile.' }) do
+          = link_to({action: 'destroy', id: profile.id}, method: :delete, data: { confirm: 'Please confirm you want to delete this profile.' }) do
             %i.glyphicon.glyphicon-remove
             delete

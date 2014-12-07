@@ -51,7 +51,7 @@ module RubyProf
       end
 
       def is_config_uri?
-        @env['PATH_INFO'] =~ %r{/ruby_prof_rails}
+        (@env['PATH_INFO'] =~ %r{/ruby_prof_rails}).present?
       end
 
       def ruby_prof_start

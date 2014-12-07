@@ -73,12 +73,18 @@ module RubyProf
 
       def hash
         @hash ||= begin
-          regexp_hash = REGEXP_HASH
-          regexp_hash[:format] = RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
-          regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
-          match_data = regexp.match(basename)
-          match_data.present? && match_data.to_hash || INVALID_FILENAME
+          hash = filename_to_hash
+          hash[:url] = CGI::unescape(hash[:url]) if hash[:url]
+          hash
         end
+      end
+
+      def filename_to_hash
+        regexp_hash = REGEXP_HASH
+        regexp_hash[:format] = RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
+        regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
+        match_data = regexp.match(basename)
+        match_data.present? && match_data.to_hash || INVALID_FILENAME
       end
 
     end

@@ -74,6 +74,7 @@ module RubyProf
       def hash
         @hash ||= begin
           hash = filename_to_hash
+          hash[:printer] = RubyProf::Rails::Printer::PRINTERS.invert[hash[:format]]
           hash[:url] = CGI::unescape(hash[:url]) if hash[:url]
           hash
         end

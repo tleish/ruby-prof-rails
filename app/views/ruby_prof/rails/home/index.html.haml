@@ -6,7 +6,7 @@
       - ruby_prof_options_style = @config[:enabled] ? 'display: none;' : ''
       #ruby_prof_options{style: ruby_prof_options_style}
         .spacer
-        = render layout: 'bootstrap_modal', locals: {id: 'printer', title: 'Printer'} do
+        = render layout: 'bootstrap_modal', locals: {id: 'printer', title: 'Printers'} do
           %p Reports are created by printers.  Supported printers include:
           %ul
             %li
@@ -29,13 +29,14 @@
                 KCachegrind.
             %li
               %p RubyProf::CallStackPrinter - Creates a HTML visualization of the Ruby stack
-            -#%li
-            -#  %p
-            -#    RubyProf::MultiPrinter - Uses the other printers to create several reports
-            -#    in one profiling run
+
         .row
           .col-lg-12
-            = select_tag :printer, options_for_select(RubyProf::Rails::Printer::PRINTERS.keys, @config[:printer]), {class: 'form-control'}
+            - RubyProf::Rails::Printer.list.each do |printer|
+              .checkbox
+                %label
+                  = check_box_tag 'printers[]', printer, Array(@config[:printers]).include?(printer)
+                  = printer
 
         .spacer
         = render layout: 'bootstrap_modal', locals: {id: 'measurement', title: 'Measurement'} do

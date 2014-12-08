@@ -1,5 +1,6 @@
 require_relative 'config'
 require_relative 'profiles'
+require 'ostruct'
 
 module RubyProf
   module Rails
@@ -8,8 +9,8 @@ module RubyProf
 
       PRINTERS = {
         FlatPrinter: 'flat.txt',
-        FlatPrinterWithLineNumbers: 'flat.txt',
-        GraphPrinter: 'flat.txt',
+        FlatPrinterWithLineNumbers: 'flat.num.txt',
+        GraphPrinter: 'graph.txt',
         GraphHtmlPrinter: 'graph.html',
         DotPrinter: '.dot',
         CallTreePrinter: 'grind.dat',
@@ -24,21 +25,45 @@ module RubyProf
       end
 
       def print(results)
-        printer = get_printer.new(results)
-        Dir.mkdir(@path) unless ::File.exists?(@path)
-        ::File.open(@path + filename, 'w+') do |f|
-          printer.print(f)
+        printers = Array(@options[:printers]).uniq
+        printers.each do |printer_key|
+          print_for(printer_key, results)
+        end
+      end
+
+      class << self
+        def valid?(printers)
+          return false if printers.blank?
+          valid_printers = PRINTERS & printers
+          valid_printers.present?
+        end
+
+        def list
+          PRINTERS.keys.map(&:to_s)
         end
       end
 
       private
 
-      def get_printer
-        printer = PRINTERS.keys.grep(/^#{@options[:printer]}$/).first || PRINTERS.keys.first
-        "RubyProf::#{printer}".constantize
+      def print_for(key, results)
+        setup = setup_printer(key)
+        printer = setup.printer.new(results)
+        Dir.mkdir(@path) unless ::File.exists?(@path)
+        ::File.open(@path + setup.filename, 'w+') do |f|
+          printer.print(f)
+        end
       end
 
-      def filename
+      def setup_printer(key)
+        printer_key = PRINTERS.keys.grep(/^#{key}$/).first || PRINTERS.keys.first
+        OpenStruct.new(
+          key: printer_key,
+          printer: "RubyProf::#{printer_key}".constantize,
+          filename: filename(PRINTERS[printer_key])
+        )
+      end
+
+      def filename(format)
         RubyProf::Rails::Profiles.hash_to_filename(
           prefix: RubyProf::Rails::Profiles::PREFIX,
           time: Time.now.to_i,
@@ -49,12 +74,11 @@ module RubyProf
       end
 
       def url_slice
-        @request.fullpath.slice(0, 50)
+        slice = @request.fullpath.slice(0, 50)
+        slice << '...' unless slice == @request.fullpath
+        slice
       end
 
-      def format
-        PRINTERS[@options[:printer].to_sym] || PRINTERS.values.first
-      end
     end
   end
 end

@@ -5,6 +5,10 @@ describe RubyProf::Rails::Profiles do
   before do
     RubyProf::Rails::Config.username = nil
     RubyProf::Rails::Config.password = nil
+    RubyProf::Rails::Config.session_auth_lambda = lambda do |session|
+      session[:is_admin] == true
+    end
+
     ::Rails.application.config.cache_classes = true
     @env = {'rack.session' => {ruby_prof_rails: {enabled: true} }}
   end
@@ -79,6 +83,23 @@ describe RubyProf::Rails::Profiles do
     end
     it 'returns returns 1 error with no username/password' do
       RubyProf::Rails::Config.alerts.length.must_equal 1
+    end
+  end
+
+  describe 'session_authenticate' do
+    it 'returns true' do
+      mock_session = {is_admin: true}
+      RubyProf::Rails::Config.session_authenticate?(mock_session).must_equal true
+    end
+
+    it 'returns true if session_authenticate is not set' do
+      RubyProf::Rails::Config.session_auth_lambda = nil
+      RubyProf::Rails::Config.session_authenticate?({}).must_equal true
+    end
+
+    it 'returns false' do
+      mock_session = {is_admin: false}
+      RubyProf::Rails::Config.session_authenticate?(mock_session).must_equal false
     end
   end
 

@@ -12,7 +12,7 @@ module RubyProf
           and RubyProf::Rails::Config.password has been configured (see documentation). }
 
       class << self
-        attr_accessor :username, :password, :path
+        attr_accessor :username, :password, :path, :session_auth_lambda
 
         def path
           @path ||= ::Rails.root + 'tmp/performance'
@@ -40,6 +40,10 @@ module RubyProf
           alerts << CACHE_CLASS_ENABLED_ALERT unless has_authentication?
           alerts << HAS_AUTHENTICATION_ALERT unless cache_class_enabled?
           alerts
+        end
+
+        def session_authenticate?(session)
+          session_auth_lambda.nil? ? true : session_auth_lambda.call(session)
         end
 
         def http_basic_authenticate

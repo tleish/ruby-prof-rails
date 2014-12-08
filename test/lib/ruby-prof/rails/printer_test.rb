@@ -30,7 +30,26 @@ describe RubyProf::Rails::Profiles do
       print(env)
       RubyProf::Rails::Profiles.list.length.must_equal printers.keys.length
     end
+  end
 
+  describe 'self.valid?' do
+    it 'returns true when the list of printers are valid' do
+      RubyProf::Rails::Printer.valid?(%w{FlatPrinter FlatPrinterWithLineNumbers}).must_equal true
+    end
+
+    it 'returns false when the list of printers are not valid' do
+      RubyProf::Rails::Printer.valid?(%w{FlatPrinter BogusPrinter}).must_equal false
+    end
+
+    it 'returns false with no printers' do
+      RubyProf::Rails::Printer.valid?(%w{}).must_equal false
+    end
+  end
+
+  describe 'self.list' do
+    it 'returns a list of printers in string format' do
+      RubyProf::Rails::Printer.list.must_equal RubyProf::Rails::Printer::PRINTERS.keys.map(&:to_s)
+    end
   end
 
   private

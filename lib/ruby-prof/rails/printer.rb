@@ -34,8 +34,8 @@ module RubyProf
       class << self
         def valid?(printers)
           return false if printers.blank?
-          valid_printers = PRINTERS & printers
-          valid_printers.present?
+          valid_printers = list & printers
+          valid_printers.present? && valid_printers == printers
         end
 
         def list

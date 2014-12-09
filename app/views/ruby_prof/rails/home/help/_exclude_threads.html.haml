@@ -1,0 +1,14 @@
+%p
+  ruby-prof supports eliminating specific threads from profiling
+  results. This is useful for reducing connectivity in the call graph, making
+  it easier to identify the source of performance problems when using a graph
+  printer.
+%p
+  exclude_threads is a list of regular expressions (line separated text).
+%pre
+  :preserve
+    thread2
+    thread3
+%p
+  After excluding threads the resulting profile will appear exactly as if
+  those threads had been inlined at their call sites.

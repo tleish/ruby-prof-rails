@@ -1,4 +1,5 @@
 - optional ||= optional
+.spacer
 .row
   .col-lg-8
     %label{for: id}
@@ -16,6 +17,6 @@
           %span.sr-only Close
         %h4.modal-title= title
       .modal-body
-        = yield
+        = render partial: "ruby_prof/rails/home/help/#{id}"
       .modal-footer
         %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close

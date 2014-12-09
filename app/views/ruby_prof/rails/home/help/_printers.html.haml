@@ -1,0 +1,29 @@
+%p Reports are created by printers.  Supported printers include:
+%ul
+  %li
+    %p
+      RubyProf::FlatPrinter - Creates a flat report in text format
+      = link_to '(example)', controller: 'printer', action: 'show', id: 'FlatPrinter'
+  %li
+    %p RubyProf::FlatPrinterWithLineNumbers - same as above but more verbose
+  %li
+    %p
+      RubyProf::GraphPrinter - Creates a call graph report in text format
+      = link_to '(example)', controller: 'printer', action: 'show', id: 'GraphPrinter'
+  %li
+    %p
+      RubyProf::GraphHtmlPrinter - Creates a call graph report in HTML (separate files per thread)
+      = link_to '(example)', controller: 'printer', action: 'show', id: 'GraphHtmlPrinter'
+  %li
+    %p
+      RubyProf::DotPrinter - Creates a call graph report in GraphViz's DOT
+      format which can be converted to an image
+      = link_to '(example)', controller: 'printer', action: 'show', id: 'DotPrinter'
+  %li
+    %p
+      RubyProf::CallTreePrinter - Creates a call tree report compatible with KCachegrind.
+      = link_to '(example)', controller: 'printer', action: 'show', id: 'CallTreePrinter'
+  %li
+    %p
+      RubyProf::CallStackPrinter - Creates a HTML visualization of the Ruby stack
+      = link_to '(example)', controller: 'printer', action: 'show', id: 'CallStackPrinter'

@@ -12,7 +12,7 @@ module RubyProf
         FlatPrinterWithLineNumbers: 'flat.num.txt',
         GraphPrinter: 'graph.txt',
         GraphHtmlPrinter: 'graph.html',
-        DotPrinter: '.dot',
+        DotPrinter: 'graph.dot',
         CallTreePrinter: 'grind.dat',
         CallStackPrinter: 'stack.html'
       }
@@ -33,6 +33,7 @@ module RubyProf
 
       class << self
         def valid?(printers)
+          printers = Array(printers)
           return false if printers.blank?
           valid_printers = list & printers
           valid_printers.present? && valid_printers == printers

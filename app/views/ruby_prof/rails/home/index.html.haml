@@ -5,31 +5,8 @@
 
       - ruby_prof_options_style = @config[:enabled] ? 'display: none;' : ''
       #ruby_prof_options{style: ruby_prof_options_style}
-        .spacer
-        = render layout: 'bootstrap_modal', locals: {id: 'printer', title: 'Printers'} do
-          %p Reports are created by printers.  Supported printers include:
-          %ul
-            %li
-              %p RubyProf::FlatPrinter - Creates a flat report in text format
-            %li
-              %p RubyProf::FlatPrinterWithLineNumbers - same as above but more verbose
-            %li
-              %p RubyProf::GraphPrinter - Creates a call graph report in text format
-            %li
-              %p
-                RubyProf::GraphHtmlPrinter - Creates a call graph report in HTML (separate
-                files per thread)
-            %li
-              %p
-                RubyProf::DotPrinter - Creates a call graph report in GraphViz's DOT
-                format which can be converted to an image
-            %li
-              %p
-                RubyProf::CallTreePrinter - Creates a call tree report compatible with
-                KCachegrind.
-            %li
-              %p RubyProf::CallStackPrinter - Creates a HTML visualization of the Ruby stack
 
+        = render partial: 'bootstrap_modal', locals: {id: 'printers', title: 'Printers'}
         .row
           .col-lg-12
             - RubyProf::Rails::Printer.list.each do |printer|
@@ -38,95 +15,20 @@
                   = check_box_tag 'printers[]', printer, Array(@config[:printers]).include?(printer)
                   = printer
 
-        .spacer
-        = render layout: 'bootstrap_modal', locals: {id: 'measurement', title: 'Measurement'} do
-          %p
-            Depending on the mode and platform, ruby-prof can measure various aspects
-            of a Ruby program.  Supported measurements include:
-          %p
-            %b Process Time:
-            measures the time used by a process between any two moments.
-            It is unaffected by other processes concurrently running on the system.
-            Note that Windows does not support measuring process times - therefore,
-            measurements on Windows defaults to wall time.
-          %p
-            %b Wall Time:
-            measures the real-world time elapsed between any two moments. If
-            there are other processes concurrently running on the system that use
-            significant CPU or disk time during a profiling run then the reported
-            results will be too large.
-          %p
-            %b CPU Time:
-            uses the CPU clock counter to measure time.  The returned values
-            are dependent on the correctly setting the CPU's frequency. This mode
-            is only supported on Pentium or PowerPC platforms (linux only).
-          %p
-            %b Allocation:
-            shows how many objects each method in a program
-            allocates.  This support was added by Sylvain Joyeux and requires a patched
-            Ruby interpreter. See below.
-          %p
-            %b Memory Usage:
-            shows how much memory each method in a program uses.
-            This support was added by Alexander Dymo and requires a patched Ruby
-            interpreter. See below.
-          %p
-            %b Garbage Collection:
-            reports how many times Ruby's garbage collector
-            is invoked during a profiling session.  This support was added by Jeremy
-            Kemper and requires a patched Ruby interpreter. See below.
-          %p
-            %b Garbage Collection Time:
-            reports how much time is spent in Ruby's
-            garbage collector during a profiling session.  This support was added by
-            Jeremy Kemper and requires a patched Ruby interpreter. See below.
+
+        = render partial: 'bootstrap_modal', locals: {id: 'measurement', title: 'Measurement'}
         .row
           .col-lg-12
             = select_tag :measurement, options_for_select(['Process Time', 'Wall Time', 'CPU Time', 'Allocation', 'Memory Usage', 'Garbage Collection', 'Garbage Collection Time'], @config[:measurement]), {class: 'form-control'}
 
-        .spacer
-        = render layout: 'bootstrap_modal', locals: {id: 'elimate_methods', title: 'Eliminate Method Patterns', optional: true} do
-          %p
-            ruby-prof supports eliminating specific methods from profiling
-            results. This is useful for reducing connectivity in the call graph, making
-            it easier to identify the source of performance problems when using a graph
-            printer.
-          %p
-            For example, consider Integer#times: it's hardly ever useful to know
-            how much time is spent in the method itself. We're much more interested
-            in how much the passed in block contributes to the time spent in the method
-            which contains the Integer#times call.
-          %p
-            eliminate_methods is a list of regular expressions (line separated text).
-          %pre
-            :preserve
-              Integer#times
-              String#.*
-          %p
-            After eliminating methods the resulting profile will appear exactly as if
-            those methods had been inlined at their call sites.
 
+        = render partial: 'bootstrap_modal', locals: {id: 'eliminate_methods', title: 'Eliminate Method Patterns', optional: true}
         .row
           .col-lg-12
             = text_area_tag :eliminate_methods, Array(@config[:eliminate_methods]).join("\n"), {class: 'form-control'}
             .help a list of regular expressions (line separated text)
 
-        .spacer
-        = render layout: 'bootstrap_modal', locals: {id: 'exclude_threads', title: 'Eliminate Thread Patterns', optional: true} do
-          %p
-            ruby-prof supports eliminating specific threads from profiling
-            results. This is useful for reducing connectivity in the call graph, making
-            it easier to identify the source of performance problems when using a graph
-            printer.
-          %p
-            exclude_threads is a list of regular expressions (line separated text).
-          %pre
-            :preserve
-              thread2
-              thread3
-          %p
-            After excluding threads the resulting profile will appear exactly as if
-            those threads had been inlined at their call sites.
+        = render partial: 'bootstrap_modal', locals: {id: 'exclude_threads', title: 'Eliminate Thread Patterns', optional: true}
 
         .row
           .col-lg-12

@@ -1,6 +1,6 @@
 - if @enable_config
 
-  = form_tag({action: 'update'}, {id: 'config', role: 'form', method: 'post'}) do
+  = form_tag(@routes.ruby_prof_rails_path, {id: 'config', role: 'form', method: 'post'}) do
     %fieldset
 
       - ruby_prof_options_style = @config[:enabled] ? 'display: none;' : ''

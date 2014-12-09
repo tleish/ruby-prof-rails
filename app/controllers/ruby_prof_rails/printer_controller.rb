@@ -1,6 +1,6 @@
-module RubyProf
+module RubyProfRails
   module Rails
-    class PrinterController < RubyProf::Rails::ApplicationController
+    class PrinterController < RubyProfRails::ApplicationController
 
       RUBY_PROF_GEM_DIR = Gem::Specification.find_by_name('ruby-prof').gem_dir
 

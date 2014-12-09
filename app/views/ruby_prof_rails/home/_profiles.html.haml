@@ -16,10 +16,10 @@
           %br
           = link_to(file_hash[:url], file_hash[:url], target: '_blank')
         %td
-          = link_to(controller: 'profile', action: 'show', id: profile.id ) do
+          = link_to @routes.ruby_prof_rails_profile_path(profile.id) do
             %i.glyphicon.glyphicon-download-alt
             = file_hash[:printer]
         %td
-          = link_to({controller: 'profile', action: 'destroy', id: profile.id}, method: :delete, data: { confirm: 'Please confirm you want to delete this profile.' }) do
+          = link_to(@routes.ruby_prof_rails_profile_path(profile.id), method: :delete, data: { confirm: 'Please confirm you want to delete this profile.' }) do
             %i.glyphicon.glyphicon-remove
             delete

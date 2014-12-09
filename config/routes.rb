@@ -1,4 +1,4 @@
-Rails.application.routes.draw do
+RubyProf::Rails::Engine.routes.draw do
 
   namespace :ruby_prof, path: 'ruby_prof_rails' do
     namespace :rails, path: '' do

@@ -11,6 +11,10 @@ module RubyProf
         app.config.middleware.use 'Rack::RubyProfRails'
       end
 
+      config.generators do |g|
+        g.template_engine :haml
+      end
+
     end
   end
 end

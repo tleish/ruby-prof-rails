@@ -29,13 +29,6 @@
             <div class="help">a list of regular expressions (line separated text)</div>
           </div>
         </div>
-        <%= render partial: 'bootstrap_modal', locals: {id: 'exclude_threads', title: 'Eliminate Thread Patterns', optional: true} %>
-        <div class="row">
-          <div class="col-lg-12">
-            <%= text_area_tag :exclude_threads, Array(@config[:exclude_threads]).join("\n"), {class: 'form-control'} %>
-            <div class="help">a list of regular expressions (line separated text)</div>
-          </div>
-        </div>
       </div>
       <div class="spacer"></div>
       <div class="row">

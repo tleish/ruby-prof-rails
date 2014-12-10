@@ -38,7 +38,6 @@ module RubyProfRails
         enabled: enabled?,
         measurement: params[:measurement],
         eliminate_methods: string_to_array(params[:eliminate_methods]),
-        exclude_threads: string_to_array(params[:exclude_threads])
       )
       session[:ruby_prof_rails][:printers] = params[:printers] if params[:printers].present?
     end

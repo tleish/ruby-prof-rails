@@ -56,7 +56,6 @@ module RubyProf
 
       def ruby_prof_start
         RubyProf.measure_mode = get_measurement
-        RubyProf.exclude_threads = array_to_regex(:exclude_threads)
         RubyProf.start
       end
 

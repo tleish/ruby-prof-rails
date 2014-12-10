@@ -19,7 +19,7 @@ module RubyProfRails
       else
         flash[:alert] = 'Profile not found'
       end
-      redirect_to controller: 'home', action: 'index'
+      redirect_to @routes.ruby_prof_rails_path
     end
 
   end

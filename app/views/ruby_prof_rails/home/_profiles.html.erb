@@ -1,0 +1,39 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>
+      DATE/URL
+    </th>
+    <th>
+      FORMAT
+    </th>
+    <th>
+      ACTION
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @profiles.each do |profile| %>
+    <% file_hash = profile.hash %>
+    <tr>
+      <td>
+        <%= Time.at(file_hash[:time].to_i).strftime('%Y-%m-%d %I:%M:%S %Z') %>
+        <br/>
+        <%= link_to(file_hash[:url], file_hash[:url], target: '_blank') %>
+      </td>
+      <td>
+        <%= link_to @routes.ruby_prof_rails_profile_path(profile.id) do %>
+          <i class="glyphicon glyphicon-download-alt"></i>
+          <%= file_hash[:printer] %>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to(@routes.ruby_prof_rails_profile_path(profile.id), method: :delete, data: { confirm: 'Please confirm you want to delete this profile.' }) do %>
+          <i class="glyphicon glyphicon-remove"></i>
+          delete
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

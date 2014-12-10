@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Rails Ruby Prof</title>
+  <meta charset="utf-8"/>
+  <%= stylesheet_link_tag    'ruby_prof_rails/application', media: 'all' %>
+  <%= stylesheet_link_tag    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css' %>
+  <%= javascript_include_tag 'ruby_prof_rails/application' %>
+  <%= javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js' %>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div class="layout">
+  <div class="row">
+    <div class="header">
+      <h1>Rails Ruby Prof</h1>
+      <h4>Configure Ruby-Prof for your Rails application</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="content">
+      <div class="spacer"></div>
+      <%= content_tag :div, flash[:alert], {class: 'alert alert-danger'} if flash[:alert] %>
+      <%= content_tag :div, flash[:notice], {class: 'alert alert-success'} if flash[:notice] %>
+      <%= content_tag :div, flash[:warning], {class: 'alert alert-warning'} if flash[:warning] %>
+      <%= yield %>
+    </div>
+  </div>
+</div>
+</body>
+</html>

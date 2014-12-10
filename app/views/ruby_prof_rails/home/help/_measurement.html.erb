@@ -1,40 +1,48 @@
-%p
+<p>
   Depending on the mode and platform, ruby-prof can measure various aspects
   of a Ruby program.  Supported measurements include:
-%p
-  %b Process Time:
+</p>
+<p>
+  <b>Process Time:</b>
   measures the time used by a process between any two moments.
   It is unaffected by other processes concurrently running on the system.
   Note that Windows does not support measuring process times - therefore,
   measurements on Windows defaults to wall time.
-%p
-  %b Wall Time:
+</p>
+<p>
+  <b>Wall Time:</b>
   measures the real-world time elapsed between any two moments. If
   there are other processes concurrently running on the system that use
   significant CPU or disk time during a profiling run then the reported
   results will be too large.
-%p
-  %b CPU Time:
+</p>
+<p>
+  <b>CPU Time:</b>
   uses the CPU clock counter to measure time.  The returned values
   are dependent on the correctly setting the CPU's frequency. This mode
   is only supported on Pentium or PowerPC platforms (linux only).
-%p
-  %b Allocation:
+</p>
+<p>
+  <b>Allocation:</b>
   shows how many objects each method in a program
   allocates.  This support was added by Sylvain Joyeux and requires a patched
   Ruby interpreter. See below.
-%p
-  %b Memory Usage:
+</p>
+<p>
+  <b>Memory Usage:</b>
   shows how much memory each method in a program uses.
   This support was added by Alexander Dymo and requires a patched Ruby
   interpreter. See below.
-%p
-  %b Garbage Collection:
+</p>
+<p>
+  <b>Garbage Collection:</b>
   reports how many times Ruby's garbage collector
   is invoked during a profiling session.  This support was added by Jeremy
   Kemper and requires a patched Ruby interpreter. See below.
-%p
-  %b Garbage Collection Time:
+</p>
+<p>
+  <b>Garbage Collection Time:</b>
   reports how much time is spent in Ruby's
   garbage collector during a profiling session.  This support was added by
   Jeremy Kemper and requires a patched Ruby interpreter. See below.
+</p>

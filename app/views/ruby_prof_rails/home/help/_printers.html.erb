@@ -1,0 +1,43 @@
+<p>Reports are created by printers.  Supported printers include:</p>
+<ul>
+  <li>
+    <p>
+      RubyProf::FlatPrinter - Creates a flat report in text format
+      <%= link_to '(example)', @routes.ruby_prof_rails_printer_path('FlatPrinter') %>
+    </p>
+  </li>
+  <li>
+    <p>RubyProf::FlatPrinterWithLineNumbers - same as above but more verbose</p>
+  </li>
+  <li>
+    <p>
+      RubyProf::GraphPrinter - Creates a call graph report in text format
+      <%= link_to '(example)', @routes.ruby_prof_rails_printer_path('GraphPrinter') %>
+    </p>
+  </li>
+  <li>
+    <p>
+      RubyProf::GraphHtmlPrinter - Creates a call graph report in HTML (separate files per thread)
+      <%= link_to '(example)', @routes.ruby_prof_rails_printer_path('GraphHtmlPrinter') %>
+    </p>
+  </li>
+  <li>
+    <p>
+      RubyProf::DotPrinter - Creates a call graph report in GraphViz's DOT
+      format which can be converted to an image
+      <%= link_to '(example)', @routes.ruby_prof_rails_printer_path('DotPrinter') %>
+    </p>
+  </li>
+  <li>
+    <p>
+      RubyProf::CallTreePrinter - Creates a call tree report compatible with KCachegrind.
+      <%= link_to '(example)', @routes.ruby_prof_rails_printer_path('CallTreePrinter') %>
+    </p>
+  </li>
+  <li>
+    <p>
+      RubyProf::CallStackPrinter - Creates a HTML visualization of the Ruby stack
+      <%= link_to '(example)', @routes.ruby_prof_rails_printer_path('CallStackPrinter') %>
+    </p>
+  </li>
+</ul>

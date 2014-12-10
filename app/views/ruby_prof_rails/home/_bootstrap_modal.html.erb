@@ -1,0 +1,54 @@
+<% optional ||= optional %>
+<div class="spacer"></div>
+<div class="row">
+  <div class="col-lg-8">
+    <label for="<%= id %>">
+      <%= title %>
+      <%= content_tag :span, '(optional)', {class: 'optional'} if optional %>
+    </label>
+  </div>
+  <div class="col-lg-4 text-right">
+    <%= link_to '[Help]', 'javascript:void(0)', data: {target: "##{id}_help", toggle: 'modal'} %>
+  </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="<%= id %>_help" role="dialog" tabindex="<%= -1 %>">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          <%= title %>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <%= render partial: "ruby_prof_rails/home/help/#{id}" %>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div aria-hidden="true" class="modal fade" id="<%= id %>_help" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal" type="button">
+          Close
+        </button>
+        <h4 class="modal-title">
+          <%= title %>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <%= render partial: "ruby_prof_rails/home/help/#{id}" %>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

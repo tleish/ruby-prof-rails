@@ -22,8 +22,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'rails', '>= 3.0'
   s.add_dependency 'ruby-prof'
-  s.add_dependency 'haml'
-  s.add_dependency 'haml-rails'
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'sinatra'
   s.add_development_dependency 'mocha'

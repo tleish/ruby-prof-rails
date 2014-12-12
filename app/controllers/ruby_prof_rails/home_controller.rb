@@ -7,6 +7,7 @@ module RubyProfRails
       @config[:printers] = Array(RubyProf::Rails::Printer.list.first) if @config[:printers].blank?
       @session_id = request.session_options[:id]
       @profiles = RubyProf::Rails::Profiles.list
+      @default_exclude_formats = RubyProf::Rails::Config.exclude_formats
     end
 
     def update
@@ -38,6 +39,7 @@ module RubyProfRails
         enabled: enabled?,
         measurement: params[:measurement],
         eliminate_methods: string_to_array(params[:eliminate_methods]),
+        exclude_formats: params[:exclude_formats]
       )
       session[:ruby_prof_rails][:printers] = params[:printers] if params[:printers].present?
     end

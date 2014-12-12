@@ -3,12 +3,18 @@ module RubyProf
     # server configuration for RubyProfRails application
     class Config
 
+      DEFAULT_EXCLUDE_FORMATS = %w{css js json map jpg jpeg png gif}.join(', ')
+
       class << self
-        attr_accessor :username, :password, :path, :session_auth_lambda, :debug
+        attr_accessor :username, :password, :path, :exclude_formats, :session_auth_lambda, :debug
 
         def path
           @path ||= ::Rails.root + 'tmp/performance'
           Pathname(@path)
+        end
+
+        def exclude_formats
+          @exclude_formats || DEFAULT_EXCLUDE_FORMATS
         end
 
         def extract_options_from(env)

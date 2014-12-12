@@ -30,21 +30,22 @@ module RubyProf
       end
 
       def skip?
-        is_config_uri? || disabled? || !is_route?
+        is_config_uri? || disabled? || !is_valid_route?
       end
 
       def call(env)
         ruby_prof_start
         status, headers, @body = @app.call(env)
-        ruby_prof_stop_and_save
+        ruby_prof_stop_and_save if @body.present?
         [status, headers, @body]
       end
 
       private
 
-      def is_route?
+      def is_valid_route?
         begin
-          @app.recognize_path(@env['REQUEST_PATH']).present?
+          route = @app.recognize_path(@env['REQUEST_PATH'])
+          route.present? && valid_format?(route[:format])
         rescue ActionController::RoutingError
           false
         end
@@ -52,6 +53,11 @@ module RubyProf
 
       def is_config_uri?
         (@env['PATH_INFO'] =~ %r{/ruby_prof_rails}).present?
+      end
+
+      def valid_format?(type)
+        exclude_formats = @options[:exclude_formats].to_s.split(',').map(&:strip)
+        !exclude_formats.include?(type)
       end
 
       def ruby_prof_start

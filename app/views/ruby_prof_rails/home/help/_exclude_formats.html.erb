@@ -1,0 +1,14 @@
+<p>
+  ruby-prof-rails supports excluding specific request file formats from the routes.
+</p>
+<p>
+  For example, you likely want to skip images (png, jpg, gif), unless you
+  are producing these images via rails code.
+</p>
+<p>
+  exclude_formats is a list of file formats (line separated text).
+</p>
+<p class="code"><%= @default_exclude_formats %></p>
+<p>
+  Any routes with the file formats specified will be ignored and skipped over.
+</p>

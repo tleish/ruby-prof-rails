@@ -4,6 +4,7 @@ PATH
     ruby-prof-rails (0.0.1)
       rails (>= 3.0)
       ruby-prof
+      ruby-prof-flamegraph
 
 GEM
   remote: https://rubygems.org/
@@ -99,6 +100,8 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.0)
     ruby-prof (0.15.2)
+    ruby-prof-flamegraph (0.3.0)
+      ruby-prof (~> 0.13)
     ruby-progressbar (1.7.0)
     sinatra (1.4.5)
       rack (~> 1.4)

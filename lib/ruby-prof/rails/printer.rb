@@ -1,5 +1,6 @@
 require_relative 'config'
 require_relative 'profiles'
+require 'ruby-prof-flamegraph'
 require 'ostruct'
 
 module RubyProf
@@ -14,7 +15,8 @@ module RubyProf
         GraphHtmlPrinter: 'graph.html',
         DotPrinter: 'graph.dot',
         CallTreePrinter: 'grind.dat',
-        CallStackPrinter: 'stack.html'
+        CallStackPrinter: 'stack.html',
+        FlameGraphPrinter: 'flame.txt'
       }
 
       def initialize(options = {})

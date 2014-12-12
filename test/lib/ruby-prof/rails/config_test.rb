@@ -35,6 +35,17 @@ describe RubyProf::Rails::Profiles do
     end
   end
 
+  describe 'exclude_formats' do
+    it 'is nil by default' do
+      RubyProf::Rails::Config.exclude_formats.must_equal RubyProf::Rails::Config::DEFAULT_EXCLUDE_FORMATS
+    end
+
+    it 'can be set' do
+      RubyProf::Rails::Config.exclude_formats = 'jpg, gif, png'
+      RubyProf::Rails::Config.exclude_formats.must_equal 'jpg, gif, png'
+    end
+  end
+
   describe 'extract_options_from' do
     it 'returns a hash regardless' do
       options = RubyProf::Rails::Config.extract_options_from('rack.session' => {})

@@ -44,16 +44,28 @@ describe RubyProf::Rails::Profiles do
 
     it 'returns true if unable to find route' do
       app = mock_app
-      app.expects(:recognize_path).returns(false)
+      app.stubs(:recognize_path).returns(nil)
       runner = RubyProf::Rails::Runner.new( env: mock_env, app: app )
       runner.skip?.must_equal true
     end
 
     it 'returns false if valid profile url' do
-      app = mock_app
-      app.expects(:recognize_path).returns(true)
-      runner = RubyProf::Rails::Runner.new( env: mock_env, app: app )
+      runner = RubyProf::Rails::Runner.new( env: mock_env, app: mock_app )
       runner.skip?.must_equal false
+    end
+
+    it 'returns true if js if exclude_format is nil' do
+      app = mock_app
+      app.stubs(:recognize_path).returns(mock_recognize_path.merge(format: 'jpeg'))
+      runner = RubyProf::Rails::Runner.new( env: mock_env, app: app )
+      runner.skip?.must_equal true
+    end
+
+    it 'returns true if url is a javascript file' do
+      app = mock_app
+      app.stubs(:recognize_path).returns(mock_recognize_path.merge(format: 'jpeg'))
+      runner = RubyProf::Rails::Runner.new( env: mock_env, app: app )
+      runner.skip?.must_equal true
     end
 
   end
@@ -75,17 +87,25 @@ describe RubyProf::Rails::Profiles do
       'rack.session' => {
         ruby_prof_rails: {
           printer: RubyProf::Rails::Printer::PRINTERS.keys.first,
-          enabled: true
+          enabled: true,
+          exclude_formats: 'png, jpeg, js'
         }
       },
       'rack.session.options' => {
         id: SecureRandom.hex
-      }
+      },
+      'PATH_INFO' => '/'
     }
   end
 
   def mock_app
-    FakeApp.new
+    app = FakeApp.new
+    app.stubs(:recognize_path).returns(mock_recognize_path)
+    app
+  end
+
+  def mock_recognize_path
+    {controller: 'test', action: 'index', url: 'test', format: 'html'}
   end
 
 end

@@ -3,15 +3,15 @@ require 'test_helper'
 # require_relative 'mocks/fake_app'
 
 describe RubyProfRails::HomeController do
-  describe 'GET :index' do
-
-    before do
-      get :index
-    end
-
-    it 'should get index' do
-      assert_response :success
-      assert_not_nil assigns(:posts)
-    end
-  end
+  # describe 'GET :index' do
+  #
+  #   before do
+  #     get :index
+  #   end
+  #
+  #   it 'should get index' do
+  #     assert_response :success
+  #     assert_not_nil assigns(:posts)
+  #   end
+  # end
 end

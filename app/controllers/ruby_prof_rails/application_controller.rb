@@ -1,21 +1,26 @@
+require 'ruby-prof/rails/config_validation'
+
 module RubyProfRails
   class ApplicationController < ActionController::Base
-    before_filter :properly_configured?, :session_authenticate, :routes
+    before_filter :init_vars, :properly_configured?, :session_authenticate
     http_basic_authenticate_with RubyProf::Rails::Config.http_basic_authenticate if @enable_config
 
     private
 
-    def session_authenticate
-      redirect_to root_path unless RubyProf::Rails::Config.session_authenticate?(session)
+    def init_vars
+      @config = RubyProf::Rails::Config
+      @config_validation = RubyProf::Rails::ConfigValidation.new(config: @config, app_config: ::Rails.application.config)
+      @routes = ruby_prof_rails_engine
     end
 
     def properly_configured?
-      return if @enable_config ||= RubyProf::Rails::Config.properly_configured?
-      flash[:alert] = ('<h4>Disabled: </h4><ul><li>' + RubyProf::Rails::Config.alerts.join('</li><li>') + '</li>').html_safe
+      return if @enable_config ||= @config_validation.properly_configured?
+      flash[:alert] = ('<h4>Disabled: </h4><ul><li>' + @config_validation.alerts.join('</li><li>') + '</li>').html_safe
     end
 
-    def routes
-      @routes = ruby_prof_rails_engine
+    def session_authenticate
+      redirect_to root_path unless @config_validation.session_auth_lambda?(session)
     end
+
   end
 end

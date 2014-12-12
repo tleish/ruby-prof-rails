@@ -26,8 +26,8 @@ module RubyProf
 
       def alerts
         alerts = []
-        alerts << CACHE_CLASS_ENABLED_ALERT unless has_authentication?
-        alerts << HAS_AUTHENTICATION_ALERT unless @cache_classes
+        alerts << CACHE_CLASS_ENABLED_ALERT unless @cache_classes
+        alerts << HAS_AUTHENTICATION_ALERT unless has_authentication?
         alerts
       end
 

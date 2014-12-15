@@ -7,7 +7,7 @@
         <%= render partial: 'bootstrap_modal', locals: {id: 'printers', title: 'Printers'} %>
         <div class="row">
           <div class="col-lg-12">
-            <% RubyProf::Rails::Printer.list.each do |printer| %>
+            <% RubyProf::Rails::Printers.types.each do |printer| %>
               <div class="checkbox">
                 <label>
                   <%= check_box_tag 'printers[]', printer, Array(@config[:printers]).include?(printer) %>

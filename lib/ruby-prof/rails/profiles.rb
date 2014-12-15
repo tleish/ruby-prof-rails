@@ -47,6 +47,7 @@ module RubyProf
 
       def initialize(filename)
         @filename = filename
+        @printers = RubyProf::Rails::Printers
         @friendly_filename = friendly_filename
       end
 
@@ -74,7 +75,7 @@ module RubyProf
       def hash
         @hash ||= begin
           hash = filename_to_hash
-          hash[:printer] = RubyProf::Rails::Printer::PRINTERS.invert[hash[:format]]
+          hash[:printer] = @printers.find_type_by(hash[:format])
           hash[:url] = CGI::unescape(hash[:url]) if hash[:url]
           hash
         end
@@ -82,7 +83,7 @@ module RubyProf
 
       def filename_to_hash
         regexp_hash = REGEXP_HASH
-        regexp_hash[:format] = RubyProf::Rails::Printer::PRINTERS.values.uniq.join('|')
+        regexp_hash[:format] = @printers.formats.uniq.join('|')
         regexp = Regexp.new regexp_hash.map{|k, v| "(?<#{k}>#{v})"}.join('-')
         match_data = regexp.match(basename)
         match_data.present? && match_data.to_hash || INVALID_FILENAME

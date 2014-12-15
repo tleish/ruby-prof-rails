@@ -2,6 +2,7 @@ require 'test_helper'
 require './test/mocks/fake_app'
 require_relative 'cleanup_profiles_module'
 require './lib/ruby-prof/rails/runner'
+require './lib/ruby-prof/rails/printers'
 require 'mocha'
 
 
@@ -86,7 +87,7 @@ describe RubyProf::Rails::Profiles do
     {
       'rack.session' => {
         ruby_prof_rails: {
-          printer: RubyProf::Rails::Printer::PRINTERS.keys.first,
+          printer: RubyProf::Rails::Printers.types.first,
           enabled: true,
           exclude_formats: 'png, jpeg, js'
         }

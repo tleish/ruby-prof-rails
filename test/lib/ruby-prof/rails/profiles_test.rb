@@ -1,6 +1,7 @@
 require 'test_helper'
 require_relative 'cleanup_profiles_module'
 require './lib/ruby-prof/rails/profiles'
+require './lib/ruby-prof/rails/printers'
 require 'digest/sha1'
 require 'fileutils'
 
@@ -74,7 +75,7 @@ describe RubyProf::Rails::Profiles do
       time: Time.now.to_i,
       session_id: Digest::SHA1.hexdigest(num.to_s),
       url: '?url=test' + num.to_s,
-      format: RubyProf::Rails::Printer::PRINTERS.values.uniq.sample
+      format: RubyProf::Rails::Printers.formats.uniq.sample
     )
   end
 end

@@ -4,7 +4,7 @@ module RubyProfRails
 
     def index
       @config = session[:ruby_prof_rails]
-      @config[:printers] = Array(RubyProf::Rails::Printer.list.first) if @config[:printers].blank?
+      @config[:printers] = Array(RubyProf::Rails::Printers.default.type.to_s) if @config[:printers].blank?
       @session_id = request.session_options[:id]
       @profiles = RubyProf::Rails::Profiles.list
       @default_exclude_formats = RubyProf::Rails::Config.exclude_formats
@@ -46,7 +46,7 @@ module RubyProfRails
 
     def enabled?
       start = (params[:start].to_i == 1)
-      valid_printers = RubyProf::Rails::Printer.valid?(params[:printers])
+      valid_printers = RubyProf::Rails::Printers.valid?(params[:printers])
       flash[:alert] = 'Please select a Printer before clicking "Start Profiling".' if start && !valid_printers
       start && valid_printers
     end

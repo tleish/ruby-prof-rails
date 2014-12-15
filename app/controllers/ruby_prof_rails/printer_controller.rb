@@ -18,7 +18,7 @@ module RubyProfRails
       private
 
       def printers
-        RubyProf::Rails::Printer::PRINTERS.merge(
+        RubyProf::Rails::Printers.hash.merge(
           FlatPrinterWithLineNumbers: 'flat.txt',
           CallTreePrinter: 'multi.grind.dat'
         )

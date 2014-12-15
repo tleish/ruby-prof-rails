@@ -21,7 +21,8 @@ module RubyProf
       end
 
       def session_auth_lambda?(session)
-        @config.session_auth_lambda.nil? ? true : @config.session_auth_lambda.call(session)
+        session_auth_lambda = @config.session_auth_lambda
+        session_auth_lambda ? session_auth_lambda.call(session) : true
       end
 
       def alerts

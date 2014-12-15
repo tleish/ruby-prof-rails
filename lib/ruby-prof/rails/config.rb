@@ -22,7 +22,10 @@ module RubyProf
         end
 
         def http_basic_authenticate
-          {name: username, password: password}
+          {
+            name: username,
+            password: password
+          }
         end
 
       end

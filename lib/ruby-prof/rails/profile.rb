@@ -23,7 +23,7 @@ module RubyProf
       end
 
       def friendly_filename
-        time = Time.at(hash[:time].to_i).strftime('%Y-%m-%d_%I-%M-%S-%Z')
+        time = Time.at(hash[:time].to_i).strftime('%Y-%m-%d_%H-%M-%S-%Z')
         "#{PREFIX}_#{time}.#{hash[:format]}"
       end
 

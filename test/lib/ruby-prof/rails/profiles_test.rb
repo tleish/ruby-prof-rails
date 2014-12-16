@@ -1,12 +1,8 @@
 require 'test_helper'
-require_relative 'cleanup_profiles_module'
-require './lib/ruby-prof/rails/profiles'
-require './lib/ruby-prof/rails/printers'
-require 'digest/sha1'
-require 'fileutils'
+require_relative 'profiles_mock_module'
 
 describe RubyProf::Rails::Profiles do
-  include RubyProf::Rails::CleanupProfilesModule
+  include RubyProf::Rails::ProfilesMockModule
 
   before do
     @profiles = create_random_profiles
@@ -19,7 +15,7 @@ describe RubyProf::Rails::Profiles do
   describe 'self.list' do
     it 'returns and array or profile objects' do
       @profiles.must_be_instance_of Array
-      @profiles.first.must_be_instance_of RubyProf::Rails::Profiles
+      @profiles.first.must_be_instance_of RubyProf::Rails::Profile
     end
   end
 
@@ -45,37 +41,4 @@ describe RubyProf::Rails::Profiles do
     end
   end
 
-  describe 'profile' do
-    it 'has properties' do
-      profile = @profiles.first
-      profile.must_respond_to :basename
-      profile.must_respond_to :friendly_filename
-      profile.must_respond_to :id
-      profile.must_respond_to :exists?
-    end
-
-    it 'has a hash property' do
-      @profiles.first.hash.must_be_instance_of Hash
-      @profiles.first.hash[:prefix].must_equal RubyProf::Rails::Profiles::PREFIX
-    end
-  end
-
-  private
-
-  def create_random_profiles
-    (1..10).each do |num|
-      FileUtils.touch(RubyProf::Rails::Config.path + filename_from(num))
-    end
-    RubyProf::Rails::Profiles.list
-  end
-
-  def filename_from(num)
-    RubyProf::Rails::Profiles.hash_to_filename(
-      prefix: RubyProf::Rails::Profiles::PREFIX,
-      time: Time.now.to_i,
-      session_id: Digest::SHA1.hexdigest(num.to_s),
-      url: '?url=test' + num.to_s,
-      format: RubyProf::Rails::Printers.formats.uniq.sample
-    )
-  end
 end

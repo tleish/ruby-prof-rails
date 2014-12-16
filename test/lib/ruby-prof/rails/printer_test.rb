@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative 'cleanup_profiles_module'
+require_relative 'profiles_mock_module'
 require './lib/ruby-prof/rails/printer'
 require './lib/ruby-prof/rails/printers'
 require './lib/ruby-prof/rails/profiles'
@@ -9,7 +9,7 @@ require 'mocha'
 
 describe RubyProf::Rails::Printer do
 
-  include RubyProf::Rails::CleanupProfilesModule
+  include RubyProf::Rails::ProfilesMockModule
 
   after do
     cleanup_profiles

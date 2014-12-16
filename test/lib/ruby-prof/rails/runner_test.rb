@@ -1,14 +1,13 @@
 require 'test_helper'
 require './test/mocks/fake_app'
-require_relative 'cleanup_profiles_module'
+require_relative 'profiles_mock_module'
 require './lib/ruby-prof/rails/runner'
-require './lib/ruby-prof/rails/printers'
 require 'mocha'
 
 
 describe RubyProf::Rails::Profiles do
 
-  include RubyProf::Rails::CleanupProfilesModule
+  include RubyProf::Rails::ProfilesMockModule
 
   before do
     @runner = RubyProf::Rails::Runner.new( env: mock_env, app: mock_app )

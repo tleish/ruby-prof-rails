@@ -36,7 +36,8 @@ describe RubyProf::Rails::Profiles do
   end
 
   describe 'exclude_formats' do
-    it 'is nil by default' do
+    it 'uses defaults when nil' do
+      RubyProf::Rails::Config.exclude_formats = nil
       RubyProf::Rails::Config.exclude_formats.must_equal RubyProf::Rails::Config::DEFAULT_EXCLUDE_FORMATS
     end
 

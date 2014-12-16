@@ -50,7 +50,7 @@ module RubyProf
         end
 
         def find_type_by(filename)
-          LIST.invert[filename]
+          LIST.key(filename)
         end
       end
 

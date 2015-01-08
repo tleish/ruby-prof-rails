@@ -1,67 +1,90 @@
 <% if @enable_config %>
-  <%= form_tag(@routes.ruby_prof_rails_path, {id: 'config', role: 'form', method: 'post'}) do %>
-    <fieldset>
-      <% ruby_prof_options_style = @config[:enabled] ? 'display: none;' : '' %>
-      <div id="ruby_prof_options" style="<%= ruby_prof_options_style %>">
 
-        <%= render partial: 'bootstrap_modal', locals: {id: 'printers', title: 'Printers'} %>
-        <div class="row">
-          <div class="col-lg-12">
-            <% RubyProf::Rails::Printers.types.each do |printer| %>
-              <div class="checkbox">
-                <label>
-                  <%= check_box_tag 'printers[]', printer, Array(@config[:printers]).include?(printer) %>
-                  <%= printer %>
-                </label>
-              </div>
-            <% end %>
-          </div>
-        </div>
+  <div role="tabpanel">
 
-        <%= render partial: 'bootstrap_modal', locals: {id: 'measurement', title: 'Measurement'} %>
-        <div class="row">
-          <div class="col-lg-12">
-            <%= select_tag :measurement, options_for_select(['Process Time', 'Wall Time', 'CPU Time', 'Allocation', 'Memory Usage', 'Garbage Collection', 'Garbage Collection Time'], @config[:measurement]), {class: 'form-control'} %>
-          </div>
-        </div>
-
-        <%= render partial: 'bootstrap_modal', locals: {id: 'eliminate_methods', title: 'Eliminate Method Patterns', optional: true} %>
-        <div class="row">
-          <div class="col-lg-12">
-            <%= text_area_tag :eliminate_methods, Array(@config[:eliminate_methods]).join("\n"), {class: 'form-control'} %>
-            <div class="help">a list of regular expressions (line separated text)</div>
-          </div>
-        </div>
-
-        <%= render partial: 'bootstrap_modal', locals: {id: 'exclude_formats', title: 'Exclude Request Route Formats', optional: true} %>
-        <div class="row">
-          <div class="col-lg-12">
-            <%= text_field_tag :exclude_formats, @config[:exclude_formats] || @default_exclude_formats, {class: 'form-control'} %>
-            <div class="help">a list of file formats (comma separated)</div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="spacer"></div>
-
-      <div class="row">
-        <div class="col-lg-12">
-          <% if @config[:enabled] %>
-            <%= button_tag 'Stop Profiling' , name: 'stop', value: 1, class: 'btn btn-danger btn-lg btn-block' , type: :submit %>
-          <% else %>
-            <%= button_tag 'Start Profiling' , name: 'start', value: 1, class: 'btn btn-success btn-lg btn-block' , type: :submit %>
-          <% end %>
-        </div>
-      </div>
-
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#run" aria-controls="run" role="tab" data-toggle="tab">Run</a></li>
       <% if !@config[:enabled] %>
-        <div class="spacer"></div>
-        <div id="results">
+        <li role="presentation" id="profiles-tab"><a href="#profiles" aria-controls="profiles" role="tab" data-toggle="tab">Profiles</a></li>
+      <% end %>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="run">
+
+        <%= form_tag(@routes.ruby_prof_rails_path, {id: 'config', role: 'form', method: 'post'}) do %>
+          <fieldset>
+            <% ruby_prof_options_style = @config[:enabled] ? 'display: none;' : '' %>
+            <div id="ruby_prof_options" style="<%= ruby_prof_options_style %>">
+
+              <%= render partial: 'bootstrap_modal', locals: {id: 'printers', title: 'Printers'} %>
+              <div class="row">
+                <% RubyProf::Rails::Printers.types.in_groups(2) do |printers| %>
+                  <div class="col-sm-6">
+                    <% printers.each do |printer| %>
+                      <div class="checkbox">
+                        <label>
+                          <%= check_box_tag 'printers[]', printer, Array(@config[:printers]).include?(printer) %>
+                          <%= printer %>
+                        </label>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+
+              <%= render partial: 'bootstrap_modal', locals: {id: 'measurement', title: 'Measurement'} %>
+              <div class="row">
+                <div class="col-lg-12">
+                  <%= select_tag :measurement, options_for_select(['Process Time', 'Wall Time', 'CPU Time', 'Allocation', 'Memory Usage', 'Garbage Collection', 'Garbage Collection Time'], @config[:measurement]), {class: 'form-control'} %>
+                </div>
+              </div>
+
+              <%= render partial: 'bootstrap_modal', locals: {id: 'eliminate_methods', title: 'Eliminate Method Patterns', optional: true} %>
+              <div class="row">
+                <div class="col-lg-12">
+                  <%= text_area_tag :eliminate_methods, Array(@config[:eliminate_methods]).join("\n"), {class: 'form-control'} %>
+                  <div class="help">a list of regular expressions (line separated text)</div>
+                </div>
+              </div>
+
+              <%= render partial: 'bootstrap_modal', locals: {id: 'exclude_formats', title: 'Exclude Request Route Formats', optional: true} %>
+              <div class="row">
+                <div class="col-lg-12">
+                  <%= text_field_tag :exclude_formats, @config[:exclude_formats] || @default_exclude_formats, {class: 'form-control'} %>
+                  <div class="help">a list of file formats (comma separated)</div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <% if @config[:enabled] %>
+                  <%= button_tag 'Stop Profiling' , name: 'stop', value: 1, class: 'btn btn-danger btn-lg btn-block' , type: :submit %>
+                <% else %>
+                  <%= button_tag 'Start Profiling' , name: 'start', value: 1, class: 'btn btn-success btn-lg btn-block' , type: :submit %>
+                <% end %>
+              </div>
+            </div>
+
+          </fieldset>
+        <% end %>
+
+
+      </div>
+      <% if !@config[:enabled] %>
+        <div role="tabpanel" class="tab-pane" id="profiles">
           <%= render 'profiles' %>
         </div>
       <% end %>
+    </div>
 
-    </fieldset>
-  <% end %>
+  </div>
+
+
 <% end %>

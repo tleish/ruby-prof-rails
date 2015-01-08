@@ -15,7 +15,7 @@ module RubyProfRails
         update_session
         flash_updates
       end
-      redirect_to @routes.ruby_prof_rails_path
+      redirect_to @routes.ruby_prof_rails_path + anchor
     end
 
     private
@@ -54,6 +54,10 @@ module RubyProfRails
     def string_to_array(string)
       string.split("\n")
         .reject(&:empty?)
+    end
+
+    def anchor
+      params[:stop] == '1' ? '#profiles' : ''
     end
 
   end

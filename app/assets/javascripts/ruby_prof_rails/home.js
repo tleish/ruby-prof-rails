@@ -5,15 +5,27 @@ $(function() {
     $(this).find('button').text('Processing...')
   });
 
+  select_profiles_tab_from_url_hash();
+  disable_modal_links();
+
+});
+
+function disable_modal_links(){
   if( !bootstrap_enabled() ){
     $("a[data-toggle='modal'").hide();
   }
-
-});
+}
 
 function bootstrap_enabled(){
   return (typeof $().modal == 'function');
 }
+
+function select_profiles_tab_from_url_hash(){
+  if( window.location.hash == '#profiles' ){
+    $('#profiles-tab a').tab('show');
+  }
+}
+
 
 // jQuery plugin to prevent double submission of forms
 jQuery.fn.preventDoubleSubmission = function() {

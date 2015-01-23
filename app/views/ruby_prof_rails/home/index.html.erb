@@ -6,7 +6,8 @@
     <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active"><a href="#run" aria-controls="run" role="tab" data-toggle="tab">Run</a></li>
       <% if !@config[:enabled] %>
-        <li role="presentation" id="profiles-tab"><a href="#profiles" aria-controls="profiles" role="tab" data-toggle="tab">Profiles</a></li>
+        <li role="presentation" id="my-profiles-tab"><a href="#my-profiles" aria-controls="my-profiles" role="tab" data-toggle="tab">My Profiles</a></li>
+        <li role="presentation" id="all-profiles-tab"><a href="#all-profiles" aria-controls="all-profiles" role="tab" data-toggle="tab">All Profiles</a></li>
       <% end %>
     </ul>
 
@@ -75,13 +76,17 @@
           </fieldset>
         <% end %>
 
-
       </div>
+
       <% if !@config[:enabled] %>
-        <div role="tabpanel" class="tab-pane" id="profiles">
-          <%= render 'profiles' %>
+        <div role="tabpanel" class="tab-pane" id="my-profiles">
+          <%= render partial: 'profiles', :locals => { profiles: my_profiles } %>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="all-profiles">
+          <%= render partial: 'profiles', :locals => { profiles: @profiles } %>
         </div>
       <% end %>
+
     </div>
 
   </div>

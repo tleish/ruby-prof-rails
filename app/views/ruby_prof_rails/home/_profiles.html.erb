@@ -1,8 +1,9 @@
+
 <table class="table table-striped">
   <thead>
   <tr>
     <th>
-      DATE/URL
+      DATE (desc) /URL
     </th>
     <th>
       FORMAT
@@ -13,18 +14,17 @@
   </tr>
   </thead>
   <tbody>
-  <% @profiles.each do |profile| %>
-    <% file_hash = profile.hash %>
+  <% profiles.each do |profile| %>
     <tr>
       <td>
-        <%= Time.at(file_hash[:time].to_i).strftime('%Y-%m-%d %I:%M:%S %Z') %>
+        <%= profile.friendly_time %>
         <br/>
-        <%= link_to(file_hash[:url], file_hash[:url], target: '_blank') %>
+        <%= link_to(truncate(profile.url, length: 50), profile.url, target: '_blank') %>
       </td>
       <td>
         <%= link_to @routes.ruby_prof_rails_profile_path(profile.id) do %>
           <i class="glyphicon glyphicon-download-alt"></i>
-          <%= file_hash[:printer] %>
+          <%= profile.printer %>
         <% end %>
       </td>
       <td>

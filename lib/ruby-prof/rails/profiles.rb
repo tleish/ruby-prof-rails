@@ -11,7 +11,7 @@ module RubyProf
 
       class << self
         def list
-          Dir[File.join(RubyProf::Rails::Config.path, "#{PREFIX}*.yml")].map do |file|
+          Dir[File.join(RubyProf::Rails::Config.path, "#{PREFIX}*.yml")].reverse.map do |file|
             RubyProf::Rails::Profile.new(file)
           end
         end

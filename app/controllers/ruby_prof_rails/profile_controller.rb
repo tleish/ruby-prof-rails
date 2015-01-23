@@ -14,6 +14,7 @@ module RubyProfRails
     def destroy
       profile = RubyProf::Rails::Profiles.find(params[:id])
       if profile
+        File.unlink profile.manifest
         File.unlink profile.filename
         flash[:notice] = 'Profile deleted'
       else

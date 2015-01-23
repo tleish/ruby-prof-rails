@@ -23,7 +23,7 @@ module RubyProf
 
       def create_random_profiles
         (1..10).each do |num|
-          create_random_profile(num)
+          create_random_profile
         end
         RubyProf::Rails::Profiles.list
       end

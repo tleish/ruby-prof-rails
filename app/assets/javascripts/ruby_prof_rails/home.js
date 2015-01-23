@@ -22,7 +22,7 @@ function bootstrap_enabled(){
 
 function select_profiles_tab_from_url_hash(){
   if( window.location.hash == '#profiles' ){
-    $('#profiles-tab a').tab('show');
+    $('#my-profiles-tab a').tab('show');
   }
 }
 

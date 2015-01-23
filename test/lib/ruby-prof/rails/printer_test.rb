@@ -20,16 +20,18 @@ describe RubyProf::Rails::Printer do
       RubyProf::Rails::Printers.hash.each do |printer, extension|
         cleanup_profiles
         env = mock_env printer.to_s
-        print(env)
-        RubyProf::Rails::Profiles.list.first.filename.must_match /.*#{extension}$/
+        printed = print(env)
+        printed.must_be_kind_of Array
+        printed.first.must_be_kind_of Hash
+        printed.first[:filename].must_match /.*#{extension}$/
       end
     end
 
     it 'prints multiple results to a file' do
       printers = RubyProf::Rails::Printers.hash.slice(:FlatPrinter, :GraphHtmlPrinter, :DotPrinter, :CallStackPrinter, :CallStackPrinter)
       env = mock_env printers.keys.map(&:to_s)
-      print(env)
-      RubyProf::Rails::Profiles.list.length.must_equal printers.keys.length
+      printed = print(env)
+      printed.length.must_equal printers.keys.length
     end
   end
 

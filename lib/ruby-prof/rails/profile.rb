@@ -1,17 +1,17 @@
-require_relative 'filename_module'
+require 'yaml'
 
 module RubyProf
   module Rails
     # RubyProf Rails Profile Utility
     class Profile
 
+      ID_PATTERN = [:time, :session_id]
+
       attr_reader :filename
 
-      include RubyProf::Rails::FilenameModule
-
-      def initialize(filename)
-        @filename = filename
-        @printers = RubyProf::Rails::Printers
+      def initialize(manifest_filename)
+        @manifest = manifest_filename
+        @filename = hash[:filename]
       end
 
       def exists?
@@ -24,7 +24,7 @@ module RubyProf
 
       def friendly_filename
         time = Time.at(hash[:time].to_i).strftime('%Y-%m-%d_%H-%M-%S-%Z')
-        "#{PREFIX}_#{time}.#{hash[:format]}"
+        "#{hash[:prefix]}_#{time}.#{hash[:format]}"
       end
 
       def time
@@ -36,12 +36,7 @@ module RubyProf
       end
 
       def hash
-        @hash ||= begin
-          hash = filename_to_hash
-          hash[:printer] = @printers.find_type_by(hash[:format])
-          hash[:url] = CGI::unescape(hash[:url]) if hash[:url]
-          hash
-        end
+        @hash ||= YAML::load_file @manifest
       end
 
     end

@@ -19,7 +19,7 @@ module RubyProf
 
       def print(results)
         printers = Array(@options[:printers]).uniq
-        printers.each do |printer_key|
+        printers.map do |printer_key|
           print_for(printer_key, results)
         end
       end
@@ -33,6 +33,14 @@ module RubyProf
         ::File.open(@path + setup.filename, 'w+') do |file|
           printer.print(file)
         end
+        attributes(setup)
+      end
+
+      def attributes(setup)
+        setup.file_hash.merge(
+          filename: setup.filename,
+          url: @request.fullpath
+        )
       end
 
     end

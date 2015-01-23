@@ -1,3 +1,4 @@
+require 'yaml'
 require_relative 'config'
 require_relative 'printer'
 
@@ -67,14 +68,15 @@ module RubyProf
 
       def ruby_prof_stop_and_save
         @results = RubyProf.stop
-        return unless @results.present?
-        @results.eliminate_methods!(array_to_regex(:eliminate_methods))
-        print
+        eliminate_methods
+        @printers = write_printers
+        write_manifests
       end
 
-      def array_to_regex(param)
-        return [] unless @options[param].present?
-        Array(@options[param]).map { |regex| Regexp.new regex }
+      def eliminate_methods
+        return unless @results.present? && @options[:eliminate_methods].present?
+        eliminate_methods_regex = Array(@options[:eliminate_methods]).map { |regex| Regexp.new regex }
+        @results.eliminate_methods!(eliminate_methods_regex)
       end
 
       def get_measurement
@@ -82,9 +84,21 @@ module RubyProf
         "RubyProf::#{measurement}".constantize
       end
 
-      def print
+      def write_printers
+        return [] unless @results.present?
         printer = RubyProf::Rails::Printer.new(env: @env)
         printer.print(@results)
+      end
+
+      def write_manifests
+        path = RubyProf::Rails::Config.path
+        Dir.mkdir(path) unless ::File.exists?(path)
+        @printers.each do |printer|
+          filename = File.join(path, "#{printer[:filename]}.yml")
+          ::File.open(filename, 'w+') do |file|
+            file.write printer.to_yaml
+          end
+        end
       end
 
     end

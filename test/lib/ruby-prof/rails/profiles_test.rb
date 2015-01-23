@@ -5,6 +5,7 @@ describe RubyProf::Rails::Profiles do
   include RubyProf::Rails::ProfilesMockModule
 
   before do
+    @request = mock_request
     @profiles = create_random_profiles
   end
 
@@ -31,12 +32,12 @@ describe RubyProf::Rails::Profiles do
 
   describe 'self.hash_to_filename' do
     it 'returns a string' do
-      filename = filename_from(30)
+      filename = hash_to_filename
       filename.must_be_instance_of String
     end
 
     it 'starts with the prefix' do
-      filename = filename_from(30)
+      filename = hash_to_filename
       filename.must_match /^#{RubyProf::Rails::Profiles::PREFIX}.*/
     end
   end

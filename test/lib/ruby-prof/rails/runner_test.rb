@@ -86,7 +86,7 @@ describe RubyProf::Rails::Profiles do
     {
       'rack.session' => {
         ruby_prof_rails: {
-          printer: RubyProf::Rails::Printers.types.first,
+          printers: RubyProf::Rails::Printers.types.first,
           enabled: true,
           exclude_formats: 'png, jpeg, js'
         }

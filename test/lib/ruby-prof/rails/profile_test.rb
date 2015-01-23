@@ -5,7 +5,8 @@ describe RubyProf::Rails::Profile do
   include RubyProf::Rails::ProfilesMockModule
 
   before do
-    @filename = create_random_profile(1).first
+    @request = mock_request
+    @filename = create_random_profile
     @profile = RubyProf::Rails::Profile.new(@filename)
   end
 
@@ -22,13 +23,12 @@ describe RubyProf::Rails::Profile do
   describe 'profile' do
     it 'has properties' do
       @profile.basename.present?.must_equal true
-      @profile.filename.must_equal @filename
+      @profile.filename.to_s.must_equal @filename.to_s.gsub('.yml', '')
       @profile.friendly_filename.present?.must_equal true
       @profile.id.present?.must_equal true
       @profile.time.present?.must_equal true
       @profile.exists?.must_equal true
       @profile.hash.must_be_instance_of Hash
-      @profile.hash[:prefix].must_equal RubyProf::Rails::Profile::PREFIX
     end
   end
 end

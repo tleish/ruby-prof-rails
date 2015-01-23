@@ -21,7 +21,7 @@ module RubyProf
       def setup_printer
         @key = find_printer.type
         @printer_class = find_printer.printer_class
-        @filename = build_filename
+        @filename = hash_to_filename
       end
 
       def find_printer

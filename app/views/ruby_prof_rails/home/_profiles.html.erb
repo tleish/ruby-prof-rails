@@ -1,39 +1,59 @@
 
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th>
-      DATE (desc) /URL
-    </th>
-    <th>
-      FORMAT
-    </th>
-    <th>
-      ACTION
-    </th>
-  </tr>
-  </thead>
-  <tbody>
-  <% profiles.each do |profile| %>
-    <tr>
-      <td>
-        <%= profile.friendly_time %>
-        <br/>
-        <%= link_to(truncate(profile.url, length: 50), profile.url, target: '_blank') %>
-      </td>
-      <td>
-        <%= link_to @routes.ruby_prof_rails_profile_path(profile.id) do %>
-          <i class="glyphicon glyphicon-download-alt"></i>
-          <%= profile.printer %>
-        <% end %>
-      </td>
-      <td>
-        <%= link_to(@routes.ruby_prof_rails_profile_path(profile.id), method: :delete, data: { confirm: 'Please confirm you want to delete this profile.' }) do %>
-          <i class="glyphicon glyphicon-remove"></i>
-          delete
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
+<%= form_tag(@routes.ruby_prof_rails_profile_batch_path, {role: 'form', method: 'post'}) do %>
+  <%= hidden_field_tag 'tab', tab %>
+    <table class="table table-striped" width="100%">
+      <thead>
+      <tr>
+        <th>
+          DATE <span class="sub-title">(desc)</span> /URL
+        </th>
+        <th>
+          FORMAT
+        </th>
+        <th width="90" align="center">
+
+          <div class="btn-group trash">
+            <button type="submit" class="btn btn-default" name="batch_method" value="delete" data-onsubmit="..." data-confirm="Please confirm you want to delete the selected profiles.">
+              <i class="glyphicon glyphicon-trash"></i>
+            </button>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" data-select="true">Select All</a></li>
+              <li><a href="#" data-select="false">Select None</a></li>
+            </ul>
+          </div>
+
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <% profiles.each do |profile| %>
+        <tr>
+          <td class="truncate">
+            <%= profile.friendly_time %>
+            <br/>
+            <%= link_to(profile.url, profile.url, target: '_blank', class: 'truncate-url') %>
+          </td>
+          <td class="truncate">
+            <%= link_to @routes.ruby_prof_rails_profile_path(profile.id) do %>
+              <i class="glyphicon glyphicon-download-alt"></i>
+              <%= profile.printer %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to(@routes.ruby_prof_rails_profile_path(profile.id, tab: tab),
+                        method: :delete,
+                        class: 'btn btn-default',
+                        data: { confirm: 'Please confirm you want to delete this profile.' }) do %>
+              <i class="glyphicon glyphicon-trash"></i>
+            <% end %>
+            &nbsp;
+            <%= check_box_tag 'id[]', profile.id %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+<% end %>

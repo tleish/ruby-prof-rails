@@ -80,3 +80,23 @@ th {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.sub-title {
+  color: #999;
+  font-weight: normal;
+}
+
+.tab-desc {
+  color: #999;
+  padding: 10px 0 0 5px;
+}
+
+.table {
+  table-layout:fixed;
+}
+
+.table td.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

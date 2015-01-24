@@ -57,7 +57,7 @@ module RubyProfRails
     end
 
     def anchor
-      params[:stop] == '1' ? '#profiles' : ''
+      params[:stop] == '1' ? '#my-profiles' : ''
     end
 
   end

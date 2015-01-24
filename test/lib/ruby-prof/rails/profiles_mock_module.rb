@@ -44,9 +44,7 @@ module RubyProf
       end
 
       def mock_request
-        OpenStruct.new(
-          session_options: {id: 1234}
-        )
+        OpenStruct.new(session_options: {id: 1234})
       end
 
       def find_printer

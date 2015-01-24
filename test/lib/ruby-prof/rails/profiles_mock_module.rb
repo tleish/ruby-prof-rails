@@ -39,7 +39,7 @@ module RubyProf
 
       def mock_filename_hash
         file_hash.merge(
-          filename: RubyProf::Rails::Config.path + hash_to_filename
+          filename: hash_to_filename
         )
       end
 

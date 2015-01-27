@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby-prof-rails (0.0.1)
+    ruby-prof-rails (0.1.0)
       rails (>= 3.0)
       ruby-prof
       ruby-prof-flamegraph

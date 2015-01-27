@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = RubyProf::Rails::VERSION
   s.authors     = ['Thomas Leishman']
   s.email       = ['tleish@gmail.com']
-  s.homepage    = 'http://github.com/tleish'
+  s.homepage    = 'https://github.com/tleish/ruby-prof-rails'
   s.summary     = 'Configure and Profile Rails applications using the ruby-prof gem.'
   s.description = %q{rails-ruby-prof is Rails Rack Middleware that allows configuration and profiling
                     of a Rails application using the ruby-prof gem for a specific session.
@@ -17,12 +17,13 @@ Gem::Specification.new do |s|
                     server restart or affecting other users sessions.}
   s.license     = 'MIT'
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.rdoc']
+  s.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   s.test_files = Dir['test/**/*']
 
   s.add_dependency 'rails', '>= 3.0'
   s.add_dependency 'ruby-prof'
   s.add_dependency 'ruby-prof-flamegraph'
+
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'sinatra'
   s.add_development_dependency 'mocha'

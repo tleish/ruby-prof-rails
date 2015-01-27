@@ -1,6 +1,7 @@
 require 'yaml'
 require_relative 'config'
 require_relative 'printer'
+require_relative 'runner_button'
 
 module RubyProf
   module Rails
@@ -36,9 +37,9 @@ module RubyProf
 
       def call(env)
         ruby_prof_start
-        status, headers, @body = @app.call(env)
-        ruby_prof_stop_and_save if @body.present?
-        [status, headers, @body]
+        status, headers, body = @app.call(env)
+        ruby_prof_stop_and_save if body.present?
+        RunnerButton.new(app: @app, response: [status, headers, body]).draw
       end
 
       private

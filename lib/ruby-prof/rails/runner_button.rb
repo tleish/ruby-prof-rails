@@ -3,7 +3,7 @@ module RubyProf
   module Rails
     class RunnerButton
 
-      BUTTON_HTML_PATH = ::File.expand_path('../../../app/views/ruby_prof_rails/header/_button.html', ::File.dirname(__FILE__))
+      BUTTON_HTML_PATH = ::File.expand_path('../../../app/views/ruby_prof_rails/runner/_button.html', ::File.dirname(__FILE__))
 
       def initialize(options)
         @app = options.fetch(:app)

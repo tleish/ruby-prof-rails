@@ -4,9 +4,8 @@ require 'ruby-prof/rails/runner'
 module Rack
   class RubyProfRails
 
-    def initialize(app, options = {})
+    def initialize(app, _)
       @app = app
-      @env = Object.new
     end
 
     def call(env)

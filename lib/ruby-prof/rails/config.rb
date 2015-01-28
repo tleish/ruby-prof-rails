@@ -9,7 +9,7 @@ module RubyProf
         attr_accessor :username, :password, :path, :exclude_formats, :session_auth_lambda, :debug
 
         def path
-          @path ||= ::Rails.root + 'tmp/performance'
+          @path ||= File.join(::Rails.root, 'tmp', 'ruby-prof-rails')
           Pathname(@path)
         end
 

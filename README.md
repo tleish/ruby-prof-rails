@@ -16,7 +16,7 @@ Rack middleware that allows you to easily run [ruby-prof](https://github.com/rub
 To install, include ruby-prof-rails in your Gemfile and run bundle install:
 
 ```ruby
-gem "ruby-prof-rails", :git => "https://github.com/tleish/ruby-prof-rails", :group => :production
+gem "ruby-prof-rails", :git => "git@github.com:tleish/ruby-prof-rails.git", :group => :production
 ```
 
 Note: ruby-prof-rails requires production type settings (cache classes, cache view lookups, etc.), therefore it is recommended to only include the gem in production environments.

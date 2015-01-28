@@ -8,7 +8,7 @@ module RubyProf
       engine_name 'ruby_prof_rails_engine'
 
       initializer :ruby_prof_rails_middleware do |app|
-        app.config.middleware.use 'Rack::RubyProfRails'
+        app.config.middleware.use Rack::RubyProfRails
       end
 
     end

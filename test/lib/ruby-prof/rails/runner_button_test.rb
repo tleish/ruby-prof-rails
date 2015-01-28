@@ -14,6 +14,7 @@ describe RubyProf::Rails::Profiles do
     end
 
     it 'it modified body if header is not html' do
+      ::Rails.application.stubs(:routes).returns(mock_routes)
       response_orig = [mock_status, mock_header, mock_html]
       response = RubyProf::Rails::RunnerButton.new( app: mock_app, response: response_orig ).draw
       (response == response_orig).must_equal false
@@ -30,8 +31,8 @@ describe RubyProf::Rails::Profiles do
 
   def mock_app
     app = FakeApp.new
-    app.stubs(:routes).returns(mock_routes)
-    app
+    # app.stubs(:routes).returns(mock_routes)
+    # app
   end
 
   def mock_routes

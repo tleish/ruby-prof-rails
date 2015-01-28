@@ -6,7 +6,6 @@ module RubyProf
       BUTTON_HTML_PATH = ::File.expand_path('../../../app/views/ruby_prof_rails/runner/_button.html', ::File.dirname(__FILE__))
 
       def initialize(options)
-        @app = options.fetch(:app)
         @status, @headers, @body = options.fetch(:response)
       end
 
@@ -43,7 +42,7 @@ module RubyProf
       end
 
       def ruby_prof_rails_route_path
-        @app.routes.named_routes['ruby_prof_rails_engine']
+        ::Rails.application.routes.named_routes['ruby_prof_rails_engine']
           .app.routes.named_routes.routes[:ruby_prof_rails_home_index].path.spec.to_s
           .gsub('(.:format)', '')
       end

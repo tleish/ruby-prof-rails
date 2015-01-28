@@ -39,14 +39,14 @@ module RubyProf
         ruby_prof_start
         status, headers, body = @app.call(env)
         ruby_prof_stop_and_save if body.present?
-        RunnerButton.new(app: @app, response: [status, headers, body]).draw
+        RunnerButton.new(response: [status, headers, body]).draw
       end
 
       private
 
       def is_valid_route?
         begin
-          route = @app.recognize_path(@env['REQUEST_PATH'])
+          route = ::Rails.application.routes.recognize_path(@env['REQUEST_PATH'])
           route.present? && valid_format?(route[:format])
         rescue ActionController::RoutingError
           false

@@ -50,6 +50,7 @@ describe RubyProf::Rails::Profiles do
     end
 
     it 'returns false if valid profile url' do
+      ::Rails.application.routes.stubs(:recognize_path).returns({format: '/test.html'} )
       runner = RubyProf::Rails::Runner.new( env: mock_env, app: mock_app )
       runner.skip?.must_equal false
     end

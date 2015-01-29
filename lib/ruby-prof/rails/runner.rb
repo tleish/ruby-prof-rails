@@ -38,7 +38,8 @@ module RubyProf
       def call(env)
         ruby_prof_start
         status, headers, body = @app.call(env)
-        ruby_prof_stop_and_save if body.present?
+        ruby_prof_stop
+        ruby_prof_save if body.present? && valid_format?(headers['Content-Type'].split('/').last)
         RunnerButton.new(response: [status, headers, body]).draw
       end
 
@@ -67,8 +68,11 @@ module RubyProf
         RubyProf.start
       end
 
-      def ruby_prof_stop_and_save
+      def ruby_prof_stop
         @results = RubyProf.stop
+      end
+
+      def ruby_prof_save
         eliminate_methods
         @printers = write_printers
         write_manifests

@@ -39,7 +39,7 @@ module RubyProf
         ruby_prof_start
         status, headers, body = @app.call(env)
         ruby_prof_stop
-        ruby_prof_save if body.present? && valid_format?(headers['Content-Type'].split('/').last)
+        ruby_prof_save if body.present? && valid_format?(headers['Content-Type'].to_s.split('/').last)
         RunnerButton.new(response: [status, headers, body]).draw
       end
 
@@ -59,8 +59,8 @@ module RubyProf
       end
 
       def valid_format?(type)
-        exclude_formats = @options[:exclude_formats].to_s.split(',').map(&:strip)
-        !exclude_formats.include?(type)
+        exclude_formats = @options[:exclude_formats].to_s.split(',').map(&:strip).map(&:downcase)
+        !exclude_formats.include?(type.to_s.downcase)
       end
 
       def ruby_prof_start

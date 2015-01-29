@@ -4,7 +4,7 @@ require 'ruby-prof/rails/runner'
 module Rack
   class RubyProfRails
 
-    def initialize(app, options = {})
+    def initialize(app)
       @app = app
     end
 

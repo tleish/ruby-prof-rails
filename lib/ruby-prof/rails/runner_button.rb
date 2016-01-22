@@ -43,7 +43,7 @@ module RubyProf
 
       def ruby_prof_rails_route_path
         ::RubyProf::Rails::Engine
-          .routes.named_routes.routes[:ruby_prof_rails_home_index].path.to_s
+          .routes.named_routes.routes[:ruby_prof_rails_home_index].path.spec.to_s
           .gsub('(.:format)', '')
       end
 

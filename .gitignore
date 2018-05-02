@@ -8,3 +8,5 @@ test/dummy/tmp/
 test/dummy/.sass-cache
 custom_plan.rb
 zeus.json
+Gemfile.lock
+.idea

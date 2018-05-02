@@ -11,7 +11,7 @@ module RubyProf
 
       def initialize(options = {})
         env = options.fetch(:env)
-        @options = RubyProf::Rails::Config.extract_options_from env
+        @options = RubyProf::Rails::Config.extract_options_from(env).symbolize_keys
         @request = Rack::Request.new(env)
         @path = RubyProf::Rails::Config.path
         @printers = RubyProf::Rails::Printers
@@ -29,7 +29,7 @@ module RubyProf
       def print_for(type, results)
         setup = RubyProf::Rails::PrinterSetup.new(type: type, request: @request)
         printer = setup.printer_class.new(results)
-        Dir.mkdir(@path) unless ::File.exists?(@path)
+        Dir.mkdir(@path) unless ::File.exist?(@path)
         ::File.open(@path + setup.filename, 'w+') do |file|
           printer.print(file)
         end

@@ -42,9 +42,15 @@ module RubyProf
       end
 
       def ruby_prof_rails_route_path
-        ::RubyProf::Rails::Engine
-          .routes.named_routes.routes[:ruby_prof_rails_home_index].path.spec.to_s
-          .gsub('(.:format)', '')
+        if ::Rails::VERSION::MAJOR >= 5
+          ::RubyProf::Rails::Engine
+            .routes.named_routes[:ruby_prof_rails_home_index].path.spec.to_s
+            .gsub('(.:format)', '')
+        else
+          ::RubyProf::Rails::Engine
+            .routes.named_routes.routes[:ruby_prof_rails_home_index].path.spec.to_s
+            .gsub('(.:format)', '')
+        end
       end
 
     end

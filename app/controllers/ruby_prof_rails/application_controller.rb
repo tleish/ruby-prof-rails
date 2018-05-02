@@ -2,7 +2,7 @@ require 'ruby-prof/rails/config_validation'
 
 module RubyProfRails
   class ApplicationController < ActionController::Base
-    before_filter :init_vars, :properly_configured?, :session_authenticate
+    before_action :init_vars, :properly_configured?, :session_authenticate
     http_basic_authenticate_with RubyProf::Rails::Config.http_basic_authenticate
 
     private

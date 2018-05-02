@@ -20,7 +20,7 @@ module RubyProf
       def initialize(options = {})
         @env = options.fetch(:env)
         @app = options.fetch(:app)
-        @options = RubyProf::Rails::Config.extract_options_from @env
+        @options = RubyProf::Rails::Config.extract_options_from(@env).symbolize_keys
       end
 
       def enabled?
@@ -97,7 +97,7 @@ module RubyProf
 
       def write_manifests
         path = RubyProf::Rails::Config.path
-        Dir.mkdir(path) unless ::File.exists?(path)
+        Dir.mkdir(path) unless ::File.exist?(path)
         @printers.each do |printer|
           filename = File.join(path, "#{printer[:filename]}.yml")
           ::File.open(filename, 'w+') do |file|

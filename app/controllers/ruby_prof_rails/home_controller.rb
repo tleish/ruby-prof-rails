@@ -1,9 +1,9 @@
 module RubyProfRails
   class HomeController < RubyProfRails::ApplicationController
-    before_filter :init_ruby_prof_rails_session
+    before_action :init_ruby_prof_rails_session
 
     def index
-      @config = session[:ruby_prof_rails]
+      @config = session[:ruby_prof_rails].symbolize_keys
       @config[:printers] = Array(RubyProf::Rails::Printers.default.type.to_s) if @config[:printers].blank?
       @session_id = request.session_options[:id]
       @profiles = RubyProf::Rails::Profiles.list

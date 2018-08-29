@@ -76,6 +76,7 @@ describe RubyProf::Rails::Profiles do
       call_return_array = [200, 'text/html', 'the body']
       app = mock_app
       app.expects(:call).returns(call_return_array)
+      # ::Rails.application.routes.stubs(:recognize_path).returns({format: '/test.html'} )
       runner = RubyProf::Rails::Runner.new( env: mock_env, app: app )
       runner.call(mock_env).must_equal call_return_array
     end
@@ -108,5 +109,54 @@ describe RubyProf::Rails::Profiles do
   def mock_recognize_path
     {controller: 'test', action: 'index', url: 'test', format: 'html'}
   end
+end
 
+describe RubyProf::Rails::RouteValidator do
+  subject { RubyProf::Rails::RouteValidator }
+  let(:mock_recognize_path) { {controller: 'test', action: 'index', url: 'test', format: 'html'} }
+
+  describe 'valid?' do
+    it 'it returns true when valid' do
+      route = subject.new(uri: nil)
+      route.stubs(:rails_and_engines).returns([mock_rails_or_engine])
+      route.valid?.must_equal true
+    end
+
+    it 'it returns false when excluding html and invalid' do
+      route = subject.new(uri: nil, exclude_formats: 'html')
+      route.stubs(:rails_and_engines).returns([mock_rails_or_engine])
+      route.valid?.must_equal false
+    end
+  end
+
+  describe 'config_uri?' do
+    it 'it returns true when not the config_uri' do
+      route = subject.new(uri: '/ruby_prof_rails')
+      route.config_uri?.must_equal true
+    end
+
+    it 'it returns false when not the config_uri' do
+      route = subject.new(uri: '/my/route')
+      route.config_uri?.must_equal false
+    end
+  end
+
+  describe 'valid_format?' do
+    it 'it returns true when not the config_uri' do
+      route = subject.new(uri: '/ruby_prof_rails')
+      route.config_uri?.must_equal true
+    end
+
+    it 'it returns false when not the config_uri' do
+      route = subject.new(uri: '/my/route')
+      route.config_uri?.must_equal false
+    end
+  end
+
+  def mock_rails_or_engine
+    rails_or_engine = Object.new
+    rails_or_engine.stubs(:routes).returns(rails_or_engine)
+    rails_or_engine.stubs(:recognize_path).returns(mock_recognize_path)
+    rails_or_engine
+  end
 end

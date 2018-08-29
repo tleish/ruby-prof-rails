@@ -31,37 +31,23 @@ module RubyProf
         !enabled?
       end
 
+      def route
+        @route ||= RouteValidator.new(uri: @env['REQUEST_PATH'], exclude_formats: @options[:exclude_formats])
+      end
+
       def skip?
-        is_config_uri? || disabled? || !is_valid_route?
+        route.config_uri? || disabled? || !route.valid?
       end
 
       def call(env)
         ruby_prof_start
         status, headers, body = @app.call(env)
         ruby_prof_stop
-        ruby_prof_save if body.present? && valid_format?(headers['Content-Type'].to_s.split('/').last)
+        ruby_prof_save if body.present? && route.valid_format?(headers['Content-Type'].to_s.split('/').last)
         RunnerButton.new(response: [status, headers, body]).draw
       end
 
       private
-
-      def is_valid_route?
-        begin
-          route = ::Rails.application.routes.recognize_path(@env['REQUEST_PATH'])
-          route.present? && valid_format?(route[:format])
-        rescue ActionController::RoutingError
-          false
-        end
-      end
-
-      def is_config_uri?
-        (@env['PATH_INFO'] =~ %r{/ruby_prof_rails}).present?
-      end
-
-      def valid_format?(type)
-        exclude_formats = @options[:exclude_formats].to_s.split(',').map(&:strip).map(&:downcase)
-        !exclude_formats.include?(type.to_s.downcase)
-      end
 
       def ruby_prof_start
         RubyProf.measure_mode = get_measurement
@@ -106,6 +92,42 @@ module RubyProf
         end
       end
 
+    end
+
+    class RouteValidator
+      attr_reader :uri, :exclude_formats
+      def initialize(uri:, exclude_formats: nil)
+        @uri = uri.to_s
+        @exclude_formats = exclude_formats.to_s.split(',').map(&:strip).map(&:downcase)
+      end
+
+      def valid?
+        route.present? && valid_format?(route[:format])
+      end
+
+      def config_uri?
+        (uri =~ %r{/ruby_prof_rails}).present?
+      end
+
+      def valid_format?(format)
+        !exclude_formats.include?(format.to_s.downcase)
+      end
+
+      private
+
+      def route
+        @route ||= rails_and_engines.map do |rails_or_engine|
+          begin
+            rails_or_engine.routes.recognize_path(uri)
+          rescue ActionController::RoutingError
+            nil
+          end
+        end.compact.first
+      end
+
+      def rails_and_engines
+        @rails_and_engines ||= [::Rails.application] + ::Rails::Engine.subclasses.map(&:instance)
+      end
     end
   end
 end
